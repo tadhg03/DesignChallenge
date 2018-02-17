@@ -15,6 +15,10 @@ public class CSVDCParser extends DCDataParser{
     
     public ArrayList<Event> events = new ArrayList<>();
     
+    public CSVDCParser(CalendarProgram calendar){
+        super.calendar = calendar;
+    }
+    
     @Override
     void readData(){
         System.out.println("Reading from CSV file...");
@@ -41,7 +45,7 @@ public class CSVDCParser extends DCDataParser{
     void processData(){
         System.out.println("Looping through loaded CSV file...");
         for(int i = 0; i < events.size(); i++)
-            CalendarProgram.events.add(events.get(i));
+            super.calendar.events.add(events.get(i));
         }
         
 }

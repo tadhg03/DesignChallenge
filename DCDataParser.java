@@ -13,6 +13,8 @@ package designchallenge1;
 //Template Pattern
 abstract public class DCDataParser extends CalendarProgram{
     
+    CalendarProgram calendar;
+    
     public void parseDataAndGenerateOutput(){
     
         readData();

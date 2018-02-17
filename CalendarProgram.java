@@ -223,9 +223,8 @@ public class CalendarProgram{
 	}
 
     private void initEvents() {
-        CSVDCParser csvDataParser = new CSVDCParser();
-        PSVDCParser psvDataParser = new PSVDCParser();
-
+        CSVDCParser csvDataParser = new CSVDCParser(this);
+        PSVDCParser psvDataParser = new PSVDCParser(this);
         
     }
 	
