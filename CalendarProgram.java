@@ -32,6 +32,7 @@ public class CalendarProgram{
 	public Container pane;
 	public JScrollPane scrollCalendarTable;
 	public JPanel calendarPanel;
+        public JLabel tadhg;
         
         //What we added
         public JLabel eventLabel;
