@@ -13,7 +13,7 @@ import java.io.*;
  */
 public class CSVDCParser extends DCDataParser{
     
-    public ArrayList<Event> events = new ArrayList<>();
+    //public ArrayList<Event> events = new ArrayList<>(); we technically dont need this i think
     
     public CSVDCParser(CalendarProgram calendar){
         super.calendar = calendar;
@@ -23,28 +23,32 @@ public class CSVDCParser extends DCDataParser{
     void readData(String name){
         System.out.println("Reading from CSV file...");
         String filename = name;
-        File filePH = new File(filename);
+        File filePH = new File(filename + ".csv");
+        
+        List<String> temp = new ArrayList<String>();
+        String line = "";
+        String delimiter = ",";
+        String[] seperated;
         
          try{
-            Scanner inputStream = new Scanner(filePH);
+            BufferedReader br = new BufferedReader(new FileReader(filePH));
             
-            while(inputStream.hasNext()){
-                String data = inputStream.next();
-                String [] values = data.split(",");
-                events.add(new Event(values[0], values[1], values[2]));
+            while((line = br.readLine()) != null){
+                seperated = line.split(delimiter);
+                temp = Arrays.asList(seperated);
+                super.events.add(new Event(temp.get(0), temp.get(1), temp.get(2)));
             }
-            inputStream.close();
             
-        } catch(FileNotFoundException e){
+        } catch(Exception e){
             e.printStackTrace();
         }
-        
+        System.out.println("csv done reading");
     }
     
     @Override
-    void processData(){
+    void processData(CalendarProgram calendar){
         System.out.println("Looping through loaded CSV file...");
-        for(int i = 0; i < events.size(); i++)
+        for(int i = 0; i < super.events.size(); i++)
             super.calendar.events.add(events.get(i));
         }
         

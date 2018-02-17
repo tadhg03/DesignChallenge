@@ -230,26 +230,29 @@ public class CalendarProgram{
         csvDataParser.readData("Philippine Holidays");
         psvDataParser.readData("DLSU Unicalendar");
         
+        csvDataParser.processData(this);
+        psvDataParser.processData(this);
+        
         //try catch for saved events, it'll try if it exists first. if it doesn't, it'll just say "No events saved."
-        try {
-            
-            csvDataParser.readData("Saved Events");
-            
-        } catch(Exception e){
-            
-            System.out.println("No events saved.");
-            
-        }
+//        try {
+//            
+//            csvDataParser.readData("Saved Events");
+//            
+//        } catch(Exception e){
+//            
+//            System.out.println("No events saved.");
+//            
+//        }
         
     }
 
-    private void savedEvents(ArrayList<Event> events){
-    
-        CSVDCParser csvDataParser = new CSVDCParser(this);
-        
-        //creates a .csv file for the user to have its events saved. "Saved Events" will be the default name.
-        csvDataParser.writeData("Saved Events", events);
-    }
+//    private void savedEvents(ArrayList<Event> events){
+//    
+//        CSVDCParser csvDataParser = new CSVDCParser(this);
+//        
+//        //creates a .csv file for the user to have its events saved. "Saved Events" will be the default name.
+//        csvDataParser.writeData("Saved Events", events);
+//    }
     
 	class btnPrev_Action implements ActionListener
         {

@@ -13,7 +13,7 @@ import java.io.*;
  */
 public class PSVDCParser extends DCDataParser{
     
-    public ArrayList<Event> events = new ArrayList<>();
+    //public ArrayList<Event> events = new ArrayList<>(); we technically dont need this i think
     
     public PSVDCParser(CalendarProgram calendar){
         super.calendar = calendar;
@@ -23,27 +23,31 @@ public class PSVDCParser extends DCDataParser{
     void readData(String name){
         System.out.println("Reading from PSV file...");
         String filename = name;
-        File filePH = new File(filename);
+        File filePH = new File(filename + ".psv");
+        
+        List<String> temp = new ArrayList<String>();
+        String line = "";
+        String delimiter = " [|] ";
+        String[] seperated;
         
          try{
-            Scanner inputStream = new Scanner(filePH);
+            BufferedReader br = new BufferedReader(new FileReader(filePH));
             
-            while(inputStream.hasNext()){
-                String data = inputStream.next();
-                String [] values = data.split("|");
-                events.add(new Event(values[0], values[1], values[2]));
+            while((line = br.readLine()) != null){
+                seperated = line.split(delimiter);
+                temp = Arrays.asList(seperated);
+                super.events.add(new Event(temp.get(1), temp.get(0), temp.get(2)));
             }
-            inputStream.close();
             
-        } catch(FileNotFoundException e){
+        } catch(Exception e){
             e.printStackTrace();
         }
         
     }
     
     @Override
-    void processData(){
-        System.out.println("Looping through loaded CSV file...");
+    void processData(CalendarProgram calendar){
+        System.out.println("Looping through loaded PSV file...");
         for(int i = 0; i < events.size(); i++)
             super.calendar.events.add(events.get(i));
         }

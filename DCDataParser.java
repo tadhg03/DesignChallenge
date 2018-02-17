@@ -13,14 +13,14 @@ import java.util.*;
  */
 
 //Template Pattern
-abstract public class DCDataParser extends CalendarProgram{
+abstract public class DCDataParser{ //took out extend here because it would error when extending and instantiating the same class
     
     protected ArrayList<Event> events = new ArrayList<>();
     CalendarProgram calendar;
     protected String name;
     
     abstract void readData(String name);
-    abstract void processData();
+    abstract void processData(CalendarProgram c); //adding this so that we can pass it onto the arraylist of the actual calendar
     
     public void writeData(String name, ArrayList<Event> events){
         System.out.println("Output generated, writing to CSV...");
