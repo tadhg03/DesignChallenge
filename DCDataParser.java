@@ -5,6 +5,8 @@
  */
 package designchallenge1;
 
+import java.util.*;
+
 /**
  *
  * @author Paolo & Tadhg
@@ -13,22 +15,27 @@ package designchallenge1;
 //Template Pattern
 abstract public class DCDataParser extends CalendarProgram{
     
+    protected ArrayList<Event> events = new ArrayList<>();
     CalendarProgram calendar;
+    protected String name;
     
-    public void parseDataAndGenerateOutput(){
-    
-        readData();
-        processData();
-        writeData();
-        
-    }
-    
-    abstract void readData();
+    abstract void readData(String name);
     abstract void processData();
     
-    public void writeData(){
+    public void writeData(String name, ArrayList<Event> events){
         System.out.println("Output generated, writing to CSV...");
         
+        for(int i = 0; i < events.size(); i++){
+        
+            /*
+            Idk how to CSV/PSV yet but the logic is:
+            - try catch statement first
+            - the loop will help write the event to the .csv or .psv file so we need to identify what kind of file we should save it in.
+            - we need to determine if the event is a holiday, if yes, save it to holiday.csv, if not, placec it to the default.
+            - once done, flush and close.
+            */
+            
+        }
     }
     
 }

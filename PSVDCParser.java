@@ -20,9 +20,9 @@ public class PSVDCParser extends DCDataParser{
     }
     
     @Override
-    void readData(){
+    void readData(String name){
         System.out.println("Reading from PSV file...");
-        String filename = "DLSU Unicalendar";
+        String filename = name;
         File filePH = new File(filename);
         
          try{

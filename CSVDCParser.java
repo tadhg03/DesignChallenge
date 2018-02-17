@@ -20,9 +20,9 @@ public class CSVDCParser extends DCDataParser{
     }
     
     @Override
-    void readData(){
+    void readData(String name){
         System.out.println("Reading from CSV file...");
-        String filename = "Philippine Holidays";
+        String filename = name;
         File filePH = new File(filename);
         
          try{

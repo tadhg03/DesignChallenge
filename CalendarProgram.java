@@ -83,9 +83,9 @@ public class CalendarProgram{
         
 	public CalendarProgram()
         {
-            
+                //initializing the events.
                 initEvents();
-            
+                
 		try {
                     UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
                 }
@@ -226,9 +226,31 @@ public class CalendarProgram{
         CSVDCParser csvDataParser = new CSVDCParser(this);
         PSVDCParser psvDataParser = new PSVDCParser(this);
         
+        //opens Philippine Holidays file and DLSU Unicalendar to get the holiday and uni data
+        csvDataParser.readData("Philippine Holidays");
+        psvDataParser.readData("DLSU Unicalendar");
+        
+        //try catch for saved events, it'll try if it exists first. if it doesn't, it'll just say "No events saved."
+        try {
+            
+            csvDataParser.readData("Saved Events");
+            
+        } catch(Exception e){
+            
+            System.out.println("No events saved.");
+            
+        }
+        
     }
-	
 
+    private void savedEvents(ArrayList<Event> events){
+    
+        CSVDCParser csvDataParser = new CSVDCParser(this);
+        
+        //creates a .csv file for the user to have its events saved. "Saved Events" will be the default name.
+        csvDataParser.writeData("Saved Events", events);
+    }
+    
 	class btnPrev_Action implements ActionListener
         {
 		public void actionPerformed (ActionEvent e)
@@ -280,12 +302,12 @@ public class CalendarProgram{
                 if(cmbYearInput.getText() != null && cmbMonthInput.getText() != null && cmbDayInput.getText() != null){
                     int col = calendarTable.getSelectedColumn();  
                     int row = calendarTable.getSelectedRow();
-                    
-//                    eventColor = new JLabel(eventBox.getText());
-//                    
-//                    eventColor.setForeground(Color.red);
-                    
+
                     modelCalendarTable.setValueAt(modelCalendarTable.getValueAt(row, col) + " " + eventBox.getText(), row, col);
+                    
+                    /*
+                        This is where savedEvents(events); will be implemented since this is where addEvents happen.
+                    */
                     
                 }
             }
