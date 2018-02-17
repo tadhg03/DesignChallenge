@@ -36,7 +36,7 @@ public class CSVDCParser extends DCDataParser{
             while((line = br.readLine()) != null){
                 seperated = line.split(delimiter);
                 temp = Arrays.asList(seperated);
-                super.events.add(new Event(temp.get(0), temp.get(1), temp.get(2)));
+                super.events.add(new Event(temp.get(0), temp.get(1), temp.get(2), true));
             }
             
         } catch(Exception e){
@@ -48,8 +48,9 @@ public class CSVDCParser extends DCDataParser{
     @Override
     void processData(CalendarProgram calendar){
         System.out.println("Looping through loaded CSV file...");
-        for(int i = 0; i < super.events.size(); i++)
-            super.calendar.events.add(events.get(i));
+        for(int i = 0; i < super.events.size(); i++){
+            calendar.events.add(super.events.get(i));
         }
+    }
         
 }

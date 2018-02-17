@@ -86,6 +86,8 @@ public class CalendarProgram{
                 //initializing the events.
                 initEvents();
                 
+                //System.out.println(events.get(0));
+                
 		try {
                     UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
                 }

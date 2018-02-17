@@ -15,7 +15,7 @@ public class Event {
     public final String name, color;
     boolean holiday;
     
-    public Event(String date, String name, String color){
+    public Event(String date, String name, String color, boolean holiday){
         
         String[] dates = date.split("/");
         
@@ -25,12 +25,12 @@ public class Event {
         
         this.name = name; 
         this.color = color;
+        this.holiday = holiday;
         
     }
     
-    
     public String toString(){
-        String string = "day: " +day+ " month: " +month+ " year: " +year+ " name: " +name+ " color: " +color;
+        String string = "day: " +day+ " month: " +month+ " year: " +year+ " name: " +name+ " color: " +color +" holiday: " +holiday;
         return string;
     }
     
