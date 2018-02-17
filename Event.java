@@ -29,5 +29,10 @@ public class Event {
     }
     
     
+    public String toString(){
+        String string = "day: " +day+ " month: " +month+ " year: " +year+ " name: " +name+ " color: " +color;
+        return string;
+    }
+    
     
 }
