@@ -20,6 +20,9 @@ public class CalendarProgram{
     
         //events
         public ArrayList<Event> events = new ArrayList<>();
+        
+        //self
+        public CalendarProgram self;
 	
         /**** Day Components ****/
 	public int yearBound, monthBound, dayBound, yearToday, monthToday;
@@ -106,6 +109,8 @@ public class CalendarProgram{
                     UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
                 }
 		catch (Exception e) {}
+                
+                self = this;
                 
 		frmMain = new JFrame ("Calendar Application");
                 frmMain.setSize(660, 750);
@@ -374,17 +379,11 @@ public class CalendarProgram{
                     
                     events.add(new Event(date, eventBox.getText(), addColor.getSelectedItem().toString(), false)); //still dont have holiday input
                     
-                    DCDataParser dp = new DCDataParser() {
-                        @Override
-                        void readData(String name) {
-                        }
-
-                        @Override
-                        void processData(CalendarProgram c) {
-                        }
-                    }; //idk if this is the correct thing to do
+                    CSVDCParser csvDataParser = new CSVDCParser(self);
+                    PSVDCParser psvDataParser = new PSVDCParser(self);
                     
-                    dp.writeData("DLSU Unicalendar.psv", events);//here
+                    csvDataParser.writeData(events);
+                    psvDataParser.writeData(events);
                     
                 }
             }

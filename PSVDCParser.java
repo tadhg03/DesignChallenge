@@ -7,6 +7,8 @@ package designchallenge1;
 
 import java.util.*;
 import java.io.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 /**
  *
  * @author gabri
@@ -44,12 +46,29 @@ public class PSVDCParser extends DCDataParser{
         }
         
     }
-    
+
     @Override
-    void processData(CalendarProgram calendar){
-        System.out.println("Looping through loaded PSV file...");
-        for(int i = 0; i < super.events.size(); i++)
-            calendar.events.add(super.events.get(i));
-    }
+    void writeData(ArrayList<Event> events) {
+        FileWriter w;
         
+        try {
+            w = new FileWriter("DLSU Unicalendar.psv");
+            
+            for(int i = 0; i < events.size(); i++){
+                if(events.get(i).holiday == false){
+                    w.write(events.get(i).name);
+                    w.write(" | ");
+                    w.write(events.get(i).month+ "/" +events.get(i).day+ "/" +events.get(i).year);
+                    w.write(" | ");
+                    w.write(events.get(i).color);
+                    w.append("\n");
+                    System.out.println("wrote psv");
+                }
+            }
+            w.close();
+            
+        } catch (IOException ex) {
+            Logger.getLogger(CSVDCParser.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
 }
