@@ -1,5 +1,6 @@
 package sms;
 
+import designchallenge1.SMSViewAdap;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JScrollPane;
@@ -12,7 +13,7 @@ import javax.swing.text.StyleContext;
 
 import values.AppStrings;
 
-public class SMSView extends JFrame{
+public class SMSView extends JFrame implements SMSViewAdap{
 	
 	private static int appIDTracker = 0;
 	private final String newLine = "\n********************************\n";
@@ -42,9 +43,9 @@ public class SMSView extends JFrame{
 	}
 
 	private void initScreen() {		
-		sc = new StyleContext();
+            sc = new StyleContext();
 	    doc = new DefaultStyledDocument(sc);
-		paneFeed = new JTextPane(doc);
+            paneFeed = new JTextPane(doc);
 	    
 	    try {
 			doc.insertString(0, new String(AppStrings.NOEVENTS+""), null);

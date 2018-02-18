@@ -1,6 +1,7 @@
 package facebook;
 
 import java.awt.Color;
+import designchallenge1.FBViewAdap;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -13,7 +14,7 @@ import javax.swing.text.StyleConstants;
 import javax.swing.text.StyleContext;
 import values.AppStrings;
 
-public class FBView extends JFrame{
+public class FBView extends JFrame implements FBViewAdap{
 	
 	private static int appIDTracker = 0;
 	private final String newLine = "\n=============================\n";
@@ -44,7 +45,7 @@ public class FBView extends JFrame{
 
 	private void initScreen() {		
 		sc = new StyleContext();
-	    doc = new DefaultStyledDocument(sc);
+	        doc = new DefaultStyledDocument(sc);
 		paneFeed = new JTextPane(doc);
 	    
 	    try {
