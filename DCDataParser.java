@@ -5,7 +5,12 @@
  */
 package designchallenge1;
 
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import java.util.stream.Collectors;
 
 /**
  *
@@ -24,18 +29,22 @@ abstract public class DCDataParser{ //took out extend here because it would erro
     
     public void writeData(String name, ArrayList<Event> events){
         System.out.println("Output generated, writing to CSV...");
-        
-        for(int i = 0; i < events.size(); i++){
-        
             /*
-            Idk how to CSV/PSV yet but the logic is:
-            - try catch statement first
-            - the loop will help write the event to the .csv or .psv file so we need to identify what kind of file we should save it in.
-            - we need to determine if the event is a holiday, if yes, save it to holiday.csv, if not, placec it to the default.
-            - once done, flush and close.
-            */
+                Idk how to CSV/PSV yet but the logic is:
+                - try catch statement first
+                - the loop will help write the event to the .csv or .psv file so we need to identify what kind of file we should save it in.
+                - we need to determine if the event is a holiday, if yes, save it to holiday.csv, if not, placec it to the default.
+                - once done, flush and close.
+                */   
             
-        }
+//        try {
+//            FileWriter w;
+//            
+//            for(int i = 0; i < events.size(); i++){
+//                if()
+//            }
+//        } catch (Exception e) {
+//        }
+            
     }
-    
 }

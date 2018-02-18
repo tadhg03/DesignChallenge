@@ -65,7 +65,6 @@ public class CalendarProgram{
 		for (i = 0; i < 6; i++)
 			for (j = 0; j < 7; j++)
 				modelCalendarTable.setValueAt(null, i, j);
-                
 		
 		GregorianCalendar cal = new GregorianCalendar(year, month, 1);
 		nod = cal.getActualMaximum(GregorianCalendar.DAY_OF_MONTH); //nod is how many days there in a month
@@ -85,9 +84,14 @@ public class CalendarProgram{
                     for(j = 0; j < 7; j++){
                         if(modelCalendarTable.getValueAt(i, j) != null){
                             String[] parts = modelCalendarTable.getValueAt(i, j).toString().split(" ");
-                                for(int k = 0; k < events.size(); k++)
-                                    if(Integer.parseInt(parts[0]) == events.get(k).day && month + 1 == events.get(k).month && year == events.get(k).year)
-                                        modelCalendarTable.setValueAt(modelCalendarTable.getValueAt(i, j) + " " + events.get(k).name, i, j);
+                                for(int k = 0; k < events.size(); k++){
+                                    if(events.get(k).holiday == false)
+                                        if(Integer.parseInt(parts[0]) == events.get(k).day && month + 1 == events.get(k).month && year == events.get(k).year)
+                                            modelCalendarTable.setValueAt(modelCalendarTable.getValueAt(i, j) + " " + events.get(k).name, i, j);
+                                    if(events.get(k).holiday == true)
+                                        if(Integer.parseInt(parts[0]) == events.get(k).day && month + 1 == events.get(k).month && year >= events.get(k).year)
+                                            modelCalendarTable.setValueAt(modelCalendarTable.getValueAt(i, j) + " " + events.get(k).name, i, j);
+                                }
                         }
                     }
                 }
@@ -253,8 +257,8 @@ public class CalendarProgram{
             int month = events.get(i).month;
             int year = events.get(i).year;
             System.out.println(events.get(i).month+"   "+ events.get(i).year);
-            refreshCalendar(month,year);
-        }
+            refreshCalendar(month - 1,year);
+        }    
         
     }
     
@@ -306,15 +310,81 @@ public class CalendarProgram{
         {
             public void actionPerformed (ActionEvent e)
             {
+                String filename = "";
+                
                 if(cmbYearInput.getText() != null && cmbMonthInput.getText() != null && cmbDayInput.getText() != null){
                     int col = calendarTable.getSelectedColumn();  
                     int row = calendarTable.getSelectedRow();
 
                     modelCalendarTable.setValueAt(modelCalendarTable.getValueAt(row, col) + " " + eventBox.getText(), row, col);
                     
-                    /*
-                        This is where savedEvents(events); will be implemented since this is where addEvents happen.
-                    */
+                    int month; //added until
+                    
+                     switch (cmbMonthInput.getText().toLowerCase()) {
+                        case "month: january":
+                            month = 1;
+                            break;
+                        case "month: february":
+                            month = 2;
+                            break;
+                        case "month: march":
+                            month = 3;
+                            break;
+                        case "month: april":
+                            month = 4;
+                            break;
+                        case "month: may":
+                            month = 5;
+                            break;
+                        case "month: june":
+                            month = 6;
+                            break;
+                        case "month: july":
+                            month = 7;
+                            break;
+                        case "month: august":
+                            month = 8;
+                            break;
+                        case "month: september":
+                            month = 9;
+                            break;
+                        case "month: october":
+                            month = 10;
+                            break;
+                        case "month: november":
+                            month = 11;
+                            break;
+                        case "month: december":
+                            month = 12;
+                            break;
+                        default: 
+                            month = 0;
+                            break;
+                    }
+                     
+                    String[] parts = cmbDayInput.getText().split(" ");
+                    String[] parts2 = cmbYearInput.getText().split(" ");
+                    
+                    
+                    String date = month + "/" +parts[1]+ "/" +parts2[1];
+                    
+                    System.out.println(parts[1]);
+                    System.out.println(parts2[1]);
+                    System.out.println(month);
+                    
+                    events.add(new Event(date, eventBox.getText(), addColor.getSelectedItem().toString(), false)); //still dont have holiday input
+                    
+                    DCDataParser dp = new DCDataParser() {
+                        @Override
+                        void readData(String name) {
+                        }
+
+                        @Override
+                        void processData(CalendarProgram c) {
+                        }
+                    }; //idk if this is the correct thing to do
+                    
+                    dp.writeData("DLSU Unicalendar.psv", events);//here
                     
                 }
             }
