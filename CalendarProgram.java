@@ -68,25 +68,35 @@ public class CalendarProgram{
                 
 		
 		GregorianCalendar cal = new GregorianCalendar(year, month, 1);
-		nod = cal.getActualMaximum(GregorianCalendar.DAY_OF_MONTH);
-		som = cal.get(GregorianCalendar.DAY_OF_WEEK);
+		nod = cal.getActualMaximum(GregorianCalendar.DAY_OF_MONTH); //nod is how many days there in a month
+                //System.out.println("nod is: "+nod);
+		som = cal.get(GregorianCalendar.DAY_OF_WEEK); //som is the count of which day during the week the month starts
+                //System.out.println("som is: "+som);
 		
 		for (i = 1; i <= nod; i++)
                 {
 			int row = new Integer((i+som-2)/7);
 			int column  =  (i+som-2)%7;
 			modelCalendarTable.setValueAt(i, row, column);
+                      
 		}
-
+                
+                for(i = 0; i < 6; i++){ //for checking if days are the same
+                    for(j = 0; j < 7; j++){
+                        if(modelCalendarTable.getValueAt(i, j) != null){
+                            String[] parts = modelCalendarTable.getValueAt(i, j).toString().split(" ");
+                                for(int k = 0; k < events.size(); k++)
+                                    if(Integer.parseInt(parts[0]) == events.get(k).day && month + 1 == events.get(k).month && year == events.get(k).year)
+                                        modelCalendarTable.setValueAt(modelCalendarTable.getValueAt(i, j) + " " + events.get(k).name, i, j);
+                        }
+                    }
+                }
+                        
 		calendarTable.setDefaultRenderer(calendarTable.getColumnClass(0), new TableRenderer());
 	}
         
 	public CalendarProgram()
         {
-                //initializing the events.
-                initEvents();
-                
-                //System.out.println(events.get(0));
                 
 		try {
                     UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
@@ -134,7 +144,7 @@ public class CalendarProgram{
                         int col = calendarTable.getSelectedColumn();  
                         int row = calendarTable.getSelectedRow();
                         String[] parts = modelCalendarTable.getValueAt(row, col).toString().split(" ");
-                        System.out.println(col + ", " + row);
+                        //System.out.println(col + ", " + row);
                         
                         cmbYearInput.setText("Year: "+ cmbYear.getSelectedItem());
                         cmbMonthInput.setText("Month: " + monthLabel.getText());
@@ -220,11 +230,15 @@ public class CalendarProgram{
                 {
 			cmbYear.addItem(String.valueOf(i));
 		}
+                
+                //initializing the events.
+                initEvents();
 		
 		refreshCalendar (monthBound, yearBound); //Refresh calendar
 	}
 
     private void initEvents() {
+        int temp;//for day
         CSVDCParser csvDataParser = new CSVDCParser(this);
         PSVDCParser psvDataParser = new PSVDCParser(this);
         
@@ -235,26 +249,14 @@ public class CalendarProgram{
         csvDataParser.processData(this);
         psvDataParser.processData(this);
         
-        //try catch for saved events, it'll try if it exists first. if it doesn't, it'll just say "No events saved."
-//        try {
-//            
-//            csvDataParser.readData("Saved Events");
-//            
-//        } catch(Exception e){
-//            
-//            System.out.println("No events saved.");
-//            
-//        }
+        for(int i = 0; i < events.size(); i++){
+            int month = events.get(i).month;
+            int year = events.get(i).year;
+            System.out.println(events.get(i).month+"   "+ events.get(i).year);
+            refreshCalendar(month,year);
+        }
         
     }
-
-//    private void savedEvents(ArrayList<Event> events){
-//    
-//        CSVDCParser csvDataParser = new CSVDCParser(this);
-//        
-//        //creates a .csv file for the user to have its events saved. "Saved Events" will be the default name.
-//        csvDataParser.writeData("Saved Events", events);
-//    }
     
 	class btnPrev_Action implements ActionListener
         {

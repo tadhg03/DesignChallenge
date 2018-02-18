@@ -18,7 +18,7 @@ public class Event {
     public Event(String date, String name, String color, boolean holiday){
         
         String[] dates = date.split("/");
-        
+
         month = Integer.parseInt(dates[0]);
         day = Integer.parseInt(dates[1]);
         year = Integer.parseInt(dates[2]);

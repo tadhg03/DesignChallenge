@@ -22,8 +22,8 @@ public class CSVDCParser extends DCDataParser{
     @Override
     void readData(String name){
         System.out.println("Reading from CSV file...");
-        String filename = name;
-        File filePH = new File(filename + ".csv");
+        String filename = name + ".csv";
+        File filePH = new File(filename);
         
         List<String> temp = new ArrayList<String>();
         String line = "";

@@ -22,8 +22,8 @@ public class PSVDCParser extends DCDataParser{
     @Override
     void readData(String name){
         System.out.println("Reading from PSV file...");
-        String filename = name;
-        File filePH = new File(filename + ".psv");
+        String filename = name + ".psv";
+        File filePH = new File(filename);
         
         List<String> temp = new ArrayList<String>();
         String line = "";
