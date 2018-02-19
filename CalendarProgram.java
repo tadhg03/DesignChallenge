@@ -111,7 +111,7 @@ public class CalendarProgram{
                     }
                 }
                         
-		calendarTable.setDefaultRenderer(calendarTable.getColumnClass(0), new TableRenderer());
+		calendarTable.setDefaultRenderer(calendarTable.getColumnClass(0), new TableRenderer(events));
 	}
         
 	public CalendarProgram()
