@@ -23,6 +23,9 @@ public class CalendarProgram{
         
         //self
         public CalendarProgram self;
+        
+        //observer
+        private ArrayList<Observer> obs = new ArrayList<>();
 	
         /**** Day Components ****/
 	public int yearBound, monthBound, dayBound, yearToday, monthToday;
@@ -48,6 +51,12 @@ public class CalendarProgram{
         /**** Calendar Table Components ***/
 	public JTable calendarTable;
         public DefaultTableModel modelCalendarTable;
+        
+        public void attatchObserver(Observer ob){
+        
+            obs.add(ob);
+            
+        }
         
         public void refreshCalendar(int month, int year)
         {
@@ -160,6 +169,57 @@ public class CalendarProgram{
                         cmbYearInput.setText("Year: "+ cmbYear.getSelectedItem());
                         cmbMonthInput.setText("Month: " + monthLabel.getText());
                         cmbDayInput.setText("Day: " + parts[0]);
+                        
+                        int month; //added until
+                    
+                     switch (monthLabel.getText().toLowerCase()) {
+                        case "january":
+                            month = 1;
+                            break;
+                        case "february":
+                            month = 2;
+                            break;
+                        case "march":
+                            month = 3;
+                            break;
+                        case "april":
+                            month = 4;
+                            break;
+                        case "may":
+                            month = 5;
+                            break;
+                        case "june":
+                            month = 6;
+                            break;
+                        case "july":
+                            month = 7;
+                            break;
+                        case "august":
+                            month = 8;
+                            break;
+                        case "september":
+                            month = 9;
+                            break;
+                        case "october":
+                            month = 10;
+                            break;
+                        case "november":
+                            month = 11;
+                            break;
+                        case "december":
+                            month = 12;
+                            break;
+                        default: 
+                            month = 0;
+                            break;
+                        }
+                        
+                        for(int i = 0; i < events.size(); i++){
+                            if(events.get(i).day == Integer.parseInt(parts[0]) && events.get(i).month == month && events.get(i).year == Integer.parseInt(cmbYear.getSelectedItem().toString()))
+                                for(int j = 0; j < obs.size(); j++)
+                                    obs.get(j).update(events.get(i));
+                        }
+                        
                         } 
                 });
                 

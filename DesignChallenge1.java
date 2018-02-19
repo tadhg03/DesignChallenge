@@ -3,6 +3,7 @@
  * and open the template in the editor.
  */
 package designchallenge1;
+
 import facebook.FBView;
 import sms.SMSView;
 
@@ -18,7 +19,8 @@ public class DesignChallenge1 {
     public static void main(String[] args) {
         // TODO code application logic here
         CalendarProgram cp = new CalendarProgram();
-//        FBView fbv = new FBView();
-//        SMSView smsv = new SMSView();
+        //added for obs
+        cp.attatchObserver(new SMSViewAdap(new SMSView(), cp));
+        cp.attatchObserver(new FBViewAdap(new FBView(), cp));
     }
 }
