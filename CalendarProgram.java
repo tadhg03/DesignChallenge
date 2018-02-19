@@ -43,6 +43,7 @@ public class CalendarProgram{
         public JButton addBtnEvent = new JButton("Add");
         public JComboBox addColor;
         public JLabel eventColor;
+        public JCheckBox isHoliday; //added
         
         /**** Calendar Table Components ***/
 	public JTable calendarTable;
@@ -128,6 +129,7 @@ public class CalendarProgram{
                 cmbMonthInput = new JLabel("Month:");
                 cmbDayInput = new JLabel("Day:");
                 addColor = new JComboBox();
+                isHoliday = new JCheckBox("Holiday"); //added
                 
                 //Adding colors to JComboBoc
                 addColor.addItem("None");
@@ -181,6 +183,7 @@ public class CalendarProgram{
                 calendarPanel.add(cmbYearInput);
                 calendarPanel.add(cmbMonthInput);
                 calendarPanel.add(cmbDayInput);
+                calendarPanel.add(isHoliday); //added
                 calendarPanel.add(addBtnEvent);
 		calendarPanel.add(btnPrev);
 		calendarPanel.add(btnNext);
@@ -201,6 +204,7 @@ public class CalendarProgram{
                 cmbYearInput.setSize(80, 20);
                 cmbDayInput.setSize(80, 20);
                 cmbMonthInput.setSize(150, 20);
+                isHoliday.setBounds(460, 650, 160, 40); //added
                 addBtnEvent.setBounds(90, 660, 180, 60);
                 addBtnEvent.setSize(60, 45);
 		btnPrev.setBounds(20, 50, 100, 50);
@@ -376,8 +380,11 @@ public class CalendarProgram{
                     System.out.println(parts[1]);
                     System.out.println(parts2[1]);
                     System.out.println(month);
-                    
-                    events.add(new Event(date, eventBox.getText(), addColor.getSelectedItem().toString(), false)); //still dont have holiday input
+
+                    if(isHoliday.isSelected())
+                        events.add(new Event(date, eventBox.getText(), addColor.getSelectedItem().toString(), true)); //still dont have holiday input
+                    else
+                        events.add(new Event(date, eventBox.getText(), addColor.getSelectedItem().toString(), false)); //still dont have holiday input
                     
                     CSVDCParser csvDataParser = new CSVDCParser(self);
                     PSVDCParser psvDataParser = new PSVDCParser(self);
