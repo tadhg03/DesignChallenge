@@ -35,7 +35,7 @@ public class SMSViewAdap extends Observer{
             events.add(e);
         
         calendar = Calendar.getInstance();
-        calendar.set(e.year, e.month - 1, e.day);
+        calendar.set(Integer.parseInt(cp.cmbYear.getSelectedItem().toString()), e.month - 1, e.day);
         
         switch((e.color.toLowerCase()).replaceAll("\\s", "")){
         

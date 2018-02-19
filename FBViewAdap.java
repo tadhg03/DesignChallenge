@@ -36,16 +36,16 @@ public class FBViewAdap extends Observer{
             
             //makes the text to the desired color.
             case "red":
-                      fbv.showNewEvent(e.name, e.month - 1, e.day, e.year, Color.RED);
+                      fbv.showNewEvent(e.name, e.month - 1, e.day, Integer.parseInt(cp.cmbYear.getSelectedItem().toString()), Color.RED);
                        break;
             case "blue":
-                      fbv.showNewEvent(e.name, e.month - 1, e.day, e.year, Color.BLUE);
+                      fbv.showNewEvent(e.name, e.month - 1, e.day, Integer.parseInt(cp.cmbYear.getSelectedItem().toString()), Color.BLUE);
                        break;
             case "green":
-                      fbv.showNewEvent(e.name, e.month - 1, e.day, e.year, Color.GREEN);
+                      fbv.showNewEvent(e.name, e.month - 1, e.day, Integer.parseInt(cp.cmbYear.getSelectedItem().toString()), Color.GREEN);
                        break;
             default:
-                    fbv.showNewEvent(e.name, e.month - 1, e.day, e.year, Color.BLACK);
+                    fbv.showNewEvent(e.name, e.month - 1, e.day, Integer.parseInt(cp.cmbYear.getSelectedItem().toString()), Color.BLACK);
                     break;                       
         }
     }
