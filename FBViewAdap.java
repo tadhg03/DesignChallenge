@@ -4,13 +4,50 @@
  * and open the template in the editor.
  */
 package designchallenge1;
+import facebook.FBView;
+import java.util.*;
+import java.awt.Color;
 
 /**
  *
  * @author Paolo & Tadhg
  */
-public interface FBViewAdap {
+public class FBViewAdap extends Observer{
     
-    void showNewEvent(CalendarProgram cp);
+    private FBView fbv;
+    private ArrayList<Event> events;
+    
+    public FBViewAdap(FBView fbv, CalendarProgram cp){
+    
+        super(cp);
+        events = new ArrayList<>();
+        this.fbv = fbv;
+        
+    }
+    
+    @Override
+    void update(Event e){
+        
+        //if the events ArrayList doesn't contain anything, we store e to the ArrayList.
+        if(!events.contains(e))
+               events.add(e);
+        
+        switch((e.color.toLowerCase()).replaceAll("\\s", "")){
+            
+            //makes the text to the desired color.
+            case "red":
+                      fbv.showNewEvent(e.name, e.month - 1, e.day, e.year, Color.RED);
+                       break;
+            case "blue":
+                      fbv.showNewEvent(e.name, e.month - 1, e.day, e.year, Color.BLUE);
+                       break;
+            case "green":
+                      fbv.showNewEvent(e.name, e.month - 1, e.day, e.year, Color.GREEN);
+                       break;
+            default:
+                    fbv.showNewEvent(e.name, e.month - 1, e.day, e.year, Color.BLACK);
+                    break;                       
+        }
+    }
     
 }

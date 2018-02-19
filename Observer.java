@@ -10,8 +10,16 @@ package designchallenge1;
  * @author Paolo & Tadhg
  */
 
-abstract public class Observer {
+abstract class Observer {
     
-    abstract void update();
+    //used to pass through CalendarProgram
+    protected CalendarProgram cp;
+    abstract void update(Event events);
+    
+    public Observer(CalendarProgram cp){
+    
+        this.cp = cp;
+           
+    }
     
 }
