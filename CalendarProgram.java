@@ -173,48 +173,8 @@ public class CalendarProgram{
                         cmbDayInput.setText("Day: " + parts[0]);
                         
                         int month; //added until
-                    
-                     switch (monthLabel.getText().toLowerCase()) {
-                        case "january":
-                            month = 1;
-                            break;
-                        case "february":
-                            month = 2;
-                            break;
-                        case "march":
-                            month = 3;
-                            break;
-                        case "april":
-                            month = 4;
-                            break;
-                        case "may":
-                            month = 5;
-                            break;
-                        case "june":
-                            month = 6;
-                            break;
-                        case "july":
-                            month = 7;
-                            break;
-                        case "august":
-                            month = 8;
-                            break;
-                        case "september":
-                            month = 9;
-                            break;
-                        case "october":
-                            month = 10;
-                            break;
-                        case "november":
-                            month = 11;
-                            break;
-                        case "december":
-                            month = 12;
-                            break;
-                        default: 
-                            month = 0;
-                            break;
-                        }
+                        
+                        month = MonthToInt(monthLabel.getText());
                         
                         for(int i = 0; i < events.size(); i++){
                             if(events.get(i).day == Integer.parseInt(parts[0]) && events.get(i).month == month && events.get(i).year == Integer.parseInt(cmbYear.getSelectedItem().toString()))
@@ -330,9 +290,55 @@ public class CalendarProgram{
         for(int i = 0; i < events.size(); i++){
             int month = events.get(i).month;
             int year = events.get(i).year;
-            System.out.println(events.get(i).month+"   "+ events.get(i).year);
+            //System.out.println(events.get(i).month+"   "+ events.get(i).year);
             refreshCalendar(month - 1,year);
         }    
+        
+    }
+    
+    private int MonthToInt(String month){
+        
+        switch (month.toLowerCase()) {
+            case "january":
+                return 1;
+                
+            case "february":
+                return 2;
+                
+            case "march":
+                return 3;
+                
+            case "april":
+                return 4;
+                
+            case "may":
+                return 5;
+                
+            case "june":
+                return 6;
+                
+            case "july":
+                return  7;
+                
+            case "august":
+                return  8;
+                
+            case "september":
+                return 9;
+                
+            case "october":
+                return 10;
+                
+            case "november":
+                return 11;
+                
+            case "december":
+                return 12;
+                
+            default: 
+                return 0;
+                
+            }
         
     }
     
@@ -394,47 +400,9 @@ public class CalendarProgram{
                     
                     int month; //added until
                     
-                     switch (cmbMonthInput.getText().toLowerCase()) {
-                        case "month: january":
-                            month = 1;
-                            break;
-                        case "month: february":
-                            month = 2;
-                            break;
-                        case "month: march":
-                            month = 3;
-                            break;
-                        case "month: april":
-                            month = 4;
-                            break;
-                        case "month: may":
-                            month = 5;
-                            break;
-                        case "month: june":
-                            month = 6;
-                            break;
-                        case "month: july":
-                            month = 7;
-                            break;
-                        case "month: august":
-                            month = 8;
-                            break;
-                        case "month: september":
-                            month = 9;
-                            break;
-                        case "month: october":
-                            month = 10;
-                            break;
-                        case "month: november":
-                            month = 11;
-                            break;
-                        case "month: december":
-                            month = 12;
-                            break;
-                        default: 
-                            month = 0;
-                            break;
-                    }
+                    String[] MonthParts = cmbMonthInput.getText().split(" ");
+                    
+                    month = MonthToInt(MonthParts[1]);
                      
                     String[] parts = cmbDayInput.getText().split(" ");
                     String[] parts2 = cmbYearInput.getText().split(" ");
