@@ -1,3 +1,5 @@
+//my g
+
 /*
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
@@ -218,6 +220,9 @@ public class CalendarProgram{
                             if(events.get(i).day == Integer.parseInt(parts[0]) && events.get(i).month == month && events.get(i).year == Integer.parseInt(cmbYear.getSelectedItem().toString()))
                                 for(int j = 0; j < obs.size(); j++)
                                     obs.get(j).update(events.get(i));
+                            if(events.get(i).day == Integer.parseInt(parts[0]) && events.get(i).month == month && events.get(i).year <= Integer.parseInt(cmbYear.getSelectedItem().toString()) && events.get(i).holiday)
+                                for(int k = 0; k < obs.size(); k++)
+                                    obs.get(k).update(events.get(i));
                         }
                         
                         } 
