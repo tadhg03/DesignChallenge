@@ -28,7 +28,7 @@ public class FBViewAdap extends Observer{
     }
     
     @Override
-    void update(Event e){
+    public void update(Event e){
         
         //if the events ArrayList doesn't contain anything, we store e to the ArrayList.
         if(!events.contains(e))

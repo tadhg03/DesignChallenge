@@ -1,5 +1,6 @@
 package sms;
 
+import designchallenge1.CalendarProgram;
 import designchallenge1.SMSViewAdap;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -13,7 +14,7 @@ import javax.swing.text.StyleContext;
 
 import values.AppStrings;
 
-public class SMSView extends JFrame implements SMSViewAdap{
+public class SMSView extends JFrame{
 	
 	private static int appIDTracker = 0;
 	private final String newLine = "\n********************************\n";
@@ -74,4 +75,8 @@ public class SMSView extends JFrame implements SMSViewAdap{
 			e.printStackTrace();
 		}
 	}
+
+    public void sendSMS(CalendarProgram cp) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
 }

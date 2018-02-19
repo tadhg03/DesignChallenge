@@ -23,7 +23,7 @@ import java.util.stream.Collectors;
 abstract public class DCDataParser{ //took out extend here because it would error when extending and instantiating the same class
     
     protected ArrayList<Event> events = new ArrayList<>();
-    CalendarProgram calendar;
+    protected CalendarProgram calendar;
     protected String name;
     
     abstract void readData(String name);

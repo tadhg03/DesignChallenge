@@ -16,6 +16,7 @@ abstract class Observer {
     
     //used to pass through CalendarProgram
     protected CalendarProgram cp;
+    
     abstract void update(Event events);
     
     public Observer(CalendarProgram cp){

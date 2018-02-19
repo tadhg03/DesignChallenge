@@ -1,5 +1,6 @@
 package facebook;
 
+import designchallenge1.CalendarProgram;
 import java.awt.Color;
 import designchallenge1.FBViewAdap;
 
@@ -14,7 +15,7 @@ import javax.swing.text.StyleConstants;
 import javax.swing.text.StyleContext;
 import values.AppStrings;
 
-public class FBView extends JFrame implements FBViewAdap{
+public class FBView extends JFrame{
 	
 	private static int appIDTracker = 0;
 	private final String newLine = "\n=============================\n";
@@ -77,4 +78,8 @@ public class FBView extends JFrame implements FBViewAdap{
 			e.printStackTrace();
 		}
 	}
+
+    public void showNewEvent(CalendarProgram cp) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
 }

@@ -85,7 +85,8 @@ public class TableRenderer extends JTextPane implements TableCellRenderer {
                                            //setForeground(Color.GREEN);
                                            break;
                                 default:
-                                        setForeground(Color.BLACK);
+                                        StyleConstants.setForeground(style, Color.BLACK);
+                                        break;
                             
                             }
                             sdoc.insertString(sdoc.getLength(), " " + events.get(i).name, style);

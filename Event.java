@@ -15,7 +15,7 @@ public class Event {
     
     public final int day, month, year;
     public final String name, color;
-    boolean holiday;
+    public boolean holiday;
     
     public Event(String date, String name, String color, boolean holiday){
         
