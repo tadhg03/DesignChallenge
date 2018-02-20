@@ -17,7 +17,7 @@ import java.awt.event.*;
 import java.util.*;
 
 public class CalendarProgram{
-    
+        
         //events
         public ArrayList<Event> events = new ArrayList<>();
         
@@ -55,6 +55,7 @@ public class CalendarProgram{
         public void attatchObserver(Observer ob){
         
             obs.add(ob);
+            notifyObs();
             
         }
         
@@ -108,7 +109,8 @@ public class CalendarProgram{
                         }
                     }
                 }
-                        
+                notifyObs();
+                
 		calendarTable.setDefaultRenderer(calendarTable.getColumnClass(0), new TableRenderer(events));
 	}
         
@@ -174,14 +176,6 @@ public class CalendarProgram{
                         
                         month = MonthToInt(monthLabel.getText());
                         
-                        for(int i = 0; i < events.size(); i++){
-                            if(events.get(i).day == Integer.parseInt(parts[0]) && events.get(i).month == month && events.get(i).year == Integer.parseInt(cmbYear.getSelectedItem().toString()))
-                                for(int j = 0; j < obs.size(); j++)
-                                    obs.get(j).update(events.get(i));
-                            else if(events.get(i).day == Integer.parseInt(parts[0]) && events.get(i).month == month && events.get(i).year <= Integer.parseInt(cmbYear.getSelectedItem().toString()) && events.get(i).holiday)
-                                for(int k = 0; k < obs.size(); k++)
-                                    obs.get(k).update(events.get(i));
-                        }
                         
                         } 
                 });
@@ -285,12 +279,14 @@ public class CalendarProgram{
         csvDataParser.processData(this);
         psvDataParser.processData(this);
         
+        //since you're making a new event
+        
         for(int i = 0; i < events.size(); i++){
             int month = events.get(i).month;
             int year = events.get(i).year;
             //System.out.println(events.get(i).month+"   "+ events.get(i).year);
             refreshCalendar(month - 1,year);
-        }    
+        }
         
     }
     
@@ -338,6 +334,26 @@ public class CalendarProgram{
                 
             }
         
+    }
+    
+    public void notifyObs(){
+        Calendar e = Calendar.getInstance();
+        int temp = e.get(Calendar.MONTH) + 1;
+        
+        int i, j;
+        
+        for(i = 0; i < events.size(); i++){
+            if(events.get(i).day == e.get(Calendar.DAY_OF_MONTH) && events.get(i).month == temp && events.get(i).year == e.get(Calendar.YEAR)){
+                for(j = 0; j < obs.size(); j++){
+                    obs.get(j).update(events.get(i));
+                }
+            }
+            else if(events.get(i).day == e.get(Calendar.DAY_OF_MONTH) && events.get(i).month == temp && events.get(i).year <= e.get(Calendar.YEAR) && events.get(i).holiday == true){
+                for(j = 0; j < obs.size(); j++){
+                    obs.get(j).update(events.get(i));
+                }
+            }    
+        }
     }
     
 	class btnPrev_Action implements ActionListener
@@ -422,6 +438,8 @@ public class CalendarProgram{
                     
                     csvDataParser.writeData(events);
                     psvDataParser.writeData(events);
+                    
+                    notifyObs();
                     
                 }
             }

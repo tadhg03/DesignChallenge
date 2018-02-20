@@ -29,24 +29,25 @@ public class FBViewAdap extends Observer{
     public void update(Event e){
         
         //if the events ArrayList doesn't contain anything, we store e to the ArrayList.
-        if(!events.contains(e))
+        if(!events.contains(e)){
                events.add(e);
-        
-        switch((e.color.toLowerCase()).replaceAll("\\s", "")){
-            
-            //makes the text to the desired color.
-            case "red":
-                      fbv.showNewEvent(e.name, e.month, e.day, Integer.parseInt(cp.cmbYear.getSelectedItem().toString()), Color.RED);
-                       break;
-            case "blue":
-                      fbv.showNewEvent(e.name, e.month, e.day, Integer.parseInt(cp.cmbYear.getSelectedItem().toString()), Color.BLUE);
-                       break;
-            case "green":
-                      fbv.showNewEvent(e.name, e.month, e.day, Integer.parseInt(cp.cmbYear.getSelectedItem().toString()), Color.GREEN);
-                       break;
-            default:
-                    fbv.showNewEvent(e.name, e.month, e.day, Integer.parseInt(cp.cmbYear.getSelectedItem().toString()), Color.BLACK);
-                    break;                       
+    
+                switch((e.color.toLowerCase()).replaceAll("\\s", "")){
+
+                    //makes the text to the desired color.
+                    case "red":
+                              fbv.showNewEvent(e.name, e.month, e.day, Integer.parseInt(cp.cmbYear.getSelectedItem().toString()), Color.RED);
+                               break;
+                    case "blue":
+                              fbv.showNewEvent(e.name, e.month, e.day, Integer.parseInt(cp.cmbYear.getSelectedItem().toString()), Color.BLUE);
+                               break;
+                    case "green":
+                              fbv.showNewEvent(e.name, e.month, e.day, Integer.parseInt(cp.cmbYear.getSelectedItem().toString()), Color.GREEN);
+                               break;
+                    default:
+                            fbv.showNewEvent(e.name, e.month, e.day, Integer.parseInt(cp.cmbYear.getSelectedItem().toString()), Color.BLACK);
+                            break;                       
+                }
         }
     }
     

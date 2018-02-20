@@ -29,29 +29,34 @@ public class SMSViewAdap extends Observer{
     
     @Override
     void update(Event e){
-    
+        
         //if the current ArrayList doesn't have Event e, it adds.
-        if(!events.contains(e))
+        if(!events.contains(e)){
             events.add(e);
         
-        calendar = Calendar.getInstance();
-        calendar.set(Integer.parseInt(cp.cmbYear.getSelectedItem().toString()), e.month - 1, e.day);
-        
-        switch((e.color.toLowerCase()).replaceAll("\\s", "")){
-        
-            case "red":
-                      smsv.sendSMS(new SMS(e.name, calendar, Color.RED));
-                       break;
-            case "blue":
-                      smsv.sendSMS(new SMS(e.name, calendar, Color.BLUE));
-                       break;
-            case "green":
-                      smsv.sendSMS(new SMS(e.name, calendar, Color.GREEN));
-                       break;
-            default:
-                    smsv.sendSMS(new SMS(e.name, calendar, Color.BLACK));
-                    break;
-        
+            calendar = Calendar.getInstance();
+            calendar.set(Integer.parseInt(cp.cmbYear.getSelectedItem().toString()), e.month - 1, e.day);
+
+                switch((e.color.toLowerCase()).replaceAll("\\s", "")){
+
+                    case "red":
+                              smsv.sendSMS(new SMS(e.name, calendar, Color.RED));
+                              
+                               break;
+                    case "blue":
+                              smsv.sendSMS(new SMS(e.name, calendar, Color.BLUE));
+                              
+                              break;
+                    case "green":
+                              smsv.sendSMS(new SMS(e.name, calendar, Color.GREEN));
+                               
+                              break;
+                    default:
+                            smsv.sendSMS(new SMS(e.name, calendar, Color.BLACK));
+                            
+                            break;
+
+                }
         }
         
     }
