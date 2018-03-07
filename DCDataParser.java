@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package designchallenge1;
+package designchallenge2;
 
 import java.io.FileWriter;
 import java.io.IOException;

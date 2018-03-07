@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package designchallenge1;
+package designchallenge2;
 
 /**
  *
@@ -12,10 +12,9 @@ package designchallenge1;
 public class Event {
     
     public final int day, month, year;
-    public final String name, color;
-    public boolean holiday;
+    public final String name, color, startTime, endTime;
     
-    public Event(String date, String name, String color, boolean holiday){
+    public Event(String date, String name, String color, String startTime, String endTime){
         
         String[] dates = date.split("/");
 
@@ -25,12 +24,13 @@ public class Event {
         
         this.name = name; 
         this.color = color;
-        this.holiday = holiday;
         
+        this.startTime = startTime;
+        this.endTime = endTime;
     }
     
     public String toString(){
-        String string = "day: " +day+ " month: " +month+ " year: " +year+ " name: " +name+ " color: " +color +" holiday: " +holiday;
+        String string = "day: " +day+ " month: " +month+ " year: " +year+ " name: " +name+ " color: " +color+ "start time: " +startTime+ "end time:" +endTime;
         return string;
     }
     

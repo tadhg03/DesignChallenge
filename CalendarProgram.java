@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package designchallenge1;
+package designchallenge2;
 
 /**
  *
@@ -23,9 +23,6 @@ public class CalendarProgram{
         
         //self
         public CalendarProgram self;
-        
-        //observer
-        private ArrayList<Observer> obs = new ArrayList<>();
 	
         /**** Day Components ****/
 	public int yearBound, monthBound, dayBound, yearToday, monthToday;
@@ -44,20 +41,12 @@ public class CalendarProgram{
         public JTextField eventBox = new JTextField();
         public JLabel cmbYearInput, cmbMonthInput, cmbDayInput;
         public JButton addBtnEvent = new JButton("Add");
-        public JComboBox addColor;
-        public JLabel eventColor;
-        public JCheckBox isHoliday; //added
+        public JCheckBox isTask;
+        public JComboBox startTime, endTime;
         
         /**** Calendar Table Components ***/
 	public JTable calendarTable;
         public DefaultTableModel modelCalendarTable;
-        
-        public void attatchObserver(Observer ob){
-        
-            obs.add(ob);
-            notifyObs();
-            
-        }
         
         public void refreshCalendar(int month, int year)
         {
@@ -97,19 +86,14 @@ public class CalendarProgram{
                 for(i = 0; i < 6; i++){ //for checking if days are the same
                     for(j = 0; j < 7; j++){
                         if(modelCalendarTable.getValueAt(i, j) != null){
-                            String[] parts = modelCalendarTable.getValueAt(i, j).toString().split(" ");
-                                for(int k = 0; k < events.size(); k++){
-                                    if(events.get(k).holiday == false)
-                                        if(Integer.parseInt(parts[0]) == events.get(k).day && month + 1 == events.get(k).month && year == events.get(k).year)
-                                            modelCalendarTable.setValueAt(modelCalendarTable.getValueAt(i, j) + " " + events.get(k).name, i, j);
-                                    if(events.get(k).holiday == true)
-                                        if(Integer.parseInt(parts[0]) == events.get(k).day && month + 1 == events.get(k).month && year >= events.get(k).year)
-                                            modelCalendarTable.setValueAt(modelCalendarTable.getValueAt(i, j) + " " + events.get(k).name, i, j);
-                                }
+                            String val = modelCalendarTable.getValueAt(i, j).toString();
+                            for(int k = 0; k < events.size(); k++){
+                                if(Integer.parseInt(val) == events.get(k).day && month + 1 == events.get(k).month && year == events.get(k).year)
+                                    modelCalendarTable.setValueAt(modelCalendarTable.getValueAt(i, j) + " " + events.get(k).name, i, j); //change to not edit the calendar
+                            }
                         }
                     }
                 }
-                notifyObs();
                 
 		calendarTable.setDefaultRenderer(calendarTable.getColumnClass(0), new TableRenderer(events));
 	}
@@ -125,7 +109,7 @@ public class CalendarProgram{
                 self = this;
                 
 		frmMain = new JFrame ("Calendar Application");
-                frmMain.setSize(660, 750);
+                frmMain.setSize(1000, 1000);
 		pane = frmMain.getContentPane();
 		pane.setLayout(null);
 		frmMain.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -139,14 +123,26 @@ public class CalendarProgram{
                 cmbYearInput = new JLabel("Year:");
                 cmbMonthInput = new JLabel("Month:");
                 cmbDayInput = new JLabel("Day:");
-                addColor = new JComboBox();
-                isHoliday = new JCheckBox("Holiday"); //added
+                isTask = new JCheckBox();
+                startTime = new JComboBox();
+                endTime = new JComboBox();
                 
-                //Adding colors to JComboBoc
-                addColor.addItem("None");
-                addColor.addItem("Red");
-                addColor.addItem("Green");
-                addColor.addItem("Blue");
+                //adding times to start and end
+                int hour = 0, minute = 0;
+                String time;
+                for(int i = 0; i < 48; i++){
+                    if(minute == 0)
+                        time = hour + ":00";
+                    else
+                        time = hour + ":" +minute;
+                    startTime.addItem(time);
+                    endTime.addItem(time);
+                    minute += 30;
+                    if(minute / 30 == 2){
+                        minute = 0;
+                        hour++;
+                    }
+                }
                 
 		btnPrev = new JButton ("<<");
 		btnNext = new JButton (">>");
@@ -196,37 +192,41 @@ public class CalendarProgram{
                 calendarPanel.add(eventLabel);
                 calendarPanel.add(eventBox);
 		calendarPanel.add(cmbYear);
-                calendarPanel.add(addColor);
+                calendarPanel.add(isTask);
+                calendarPanel.add(startTime);
+                calendarPanel.add(endTime);
                 calendarPanel.add(cmbYearInput);
                 calendarPanel.add(cmbMonthInput);
                 calendarPanel.add(cmbDayInput);
-                calendarPanel.add(isHoliday); //added
                 calendarPanel.add(addBtnEvent);
 		calendarPanel.add(btnPrev);
 		calendarPanel.add(btnNext);
 		calendarPanel.add(scrollCalendarTable);
 		
-                calendarPanel.setBounds(0, 0, 650, 710);
+                calendarPanel.setBounds(0, 0, 1000, 1000);
                 monthLabel.setBounds(320-monthLabel.getPreferredSize().width/2, 50, 200, 50);
 		yearLabel.setBounds(20, 610, 160, 40);
                 eventLabel.setBounds(20, 625, 170, 50);
                 eventBox.setBounds(90, 640, 180, 60);
                 eventBox.setSize(150, 20);
 		cmbYear.setBounds(460, 610, 160, 40);
-                addColor.setBounds(150, 660, 180, 60);
-                addColor.setSize(90, 25);
+                isTask.setBounds(150, 660, 180, 60);
+                isTask.setSize(90, 25);
+                startTime.setBounds(150, 800, 180, 60);
+                startTime.setSize(90, 25);
+                endTime.setBounds(150, 850, 180, 60);
+                endTime.setSize(90, 25);
                 cmbYearInput.setBounds(250, 640, 180, 60);
                 cmbMonthInput.setBounds(250, 660, 180, 60);
                 cmbDayInput.setBounds(250, 680, 180, 60);
                 cmbYearInput.setSize(80, 20);
                 cmbDayInput.setSize(80, 20);
                 cmbMonthInput.setSize(150, 20);
-                isHoliday.setBounds(460, 650, 160, 40); //added
                 addBtnEvent.setBounds(90, 660, 180, 60);
                 addBtnEvent.setSize(60, 45);
 		btnPrev.setBounds(20, 50, 100, 50);
 		btnNext.setBounds(520, 50, 100, 50);
-		scrollCalendarTable.setBounds(20, 100, 600, 500);
+		scrollCalendarTable.setBounds(20, 100, 300, 250); //this is the calendar itself
                 
 		frmMain.setResizable(false);
 		frmMain.setVisible(true);
@@ -252,7 +252,7 @@ public class CalendarProgram{
 		calendarTable.setRowSelectionAllowed(true);
 		calendarTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
-		calendarTable.setRowHeight(76);
+		calendarTable.setRowHeight(41); //change this later to make it small orignally 76, 7 , 6
 		modelCalendarTable.setColumnCount(7);
 		modelCalendarTable.setRowCount(6);
 		
@@ -269,14 +269,11 @@ public class CalendarProgram{
 
     private void initEvents() {
         int temp;//for day
-        CSVDCParser csvDataParser = new CSVDCParser(this);
         PSVDCParser psvDataParser = new PSVDCParser(this);
         
         //opens Philippine Holidays file and DLSU Unicalendar to get the holiday and uni data
-        csvDataParser.readData("Philippine Holidays");
         psvDataParser.readData("DLSU Unicalendar");
-        
-        csvDataParser.processData(this);
+
         psvDataParser.processData(this);
         
         //since you're making a new event
@@ -334,26 +331,6 @@ public class CalendarProgram{
                 
             }
         
-    }
-    
-    public void notifyObs(){
-        Calendar e = Calendar.getInstance();
-        int temp = e.get(Calendar.MONTH) + 1;
-        
-        int i, j;
-        
-        for(i = 0; i < events.size(); i++){
-            if(events.get(i).day == e.get(Calendar.DAY_OF_MONTH) && events.get(i).month == temp && events.get(i).year == e.get(Calendar.YEAR)){
-                for(j = 0; j < obs.size(); j++){
-                    obs.get(j).update(events.get(i));
-                }
-            }
-            else if(events.get(i).day == e.get(Calendar.DAY_OF_MONTH) && events.get(i).month == temp && events.get(i).year <= e.get(Calendar.YEAR) && events.get(i).holiday == true){
-                for(j = 0; j < obs.size(); j++){
-                    obs.get(j).update(events.get(i));
-                }
-            }    
-        }
     }
     
 	class btnPrev_Action implements ActionListener
@@ -428,18 +405,14 @@ public class CalendarProgram{
                     System.out.println(parts2[1]);
                     System.out.println(month);
 
-                    if(isHoliday.isSelected())
-                        events.add(new Event(date, eventBox.getText(), addColor.getSelectedItem().toString(), true)); //still dont have holiday input
+                    if(isTask.isSelected())
+                        events.add(new Event(date, eventBox.getText(), "Green", startTime.getSelectedItem().toString(), endTime.getSelectedItem().toString())); //add drop box first for start and end time
                     else
-                        events.add(new Event(date, eventBox.getText(), addColor.getSelectedItem().toString(), false)); //still dont have holiday input
+                        events.add(new Event(date, eventBox.getText(), "Blue", startTime.getSelectedItem().toString(), endTime.getSelectedItem().toString())); //add drop box first for start and end time
                     
-                    CSVDCParser csvDataParser = new CSVDCParser(self);
                     PSVDCParser psvDataParser = new PSVDCParser(self);
                     
-                    csvDataParser.writeData(events);
                     psvDataParser.writeData(events);
-                    
-                    notifyObs();
                     
                 }
             }

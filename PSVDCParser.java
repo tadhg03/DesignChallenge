@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package designchallenge1;
+package designchallenge2;
 
 import java.util.*;
 import java.io.*;
@@ -24,26 +24,26 @@ public class PSVDCParser extends DCDataParser{
     @Override
     void readData(String name){
         System.out.println("Reading from PSV file...");
-        String filename = name + ".psv";
-        File filePH = new File(filename);
-        
-        List<String> temp = new ArrayList<String>();
-        String line = "";
-        String delimiter = " [|] ";
-        String[] seperated;
-        
-         try{
-            BufferedReader br = new BufferedReader(new FileReader(filePH));
-            
-            while((line = br.readLine()) != null){
-                seperated = line.split(delimiter);
-                temp = Arrays.asList(seperated);
-                super.events.add(new Event(temp.get(1), temp.get(0), temp.get(2), false));
-            }
-            
-        } catch(Exception e){
-            e.printStackTrace();
-        }
+//        String filename = name + ".psv";
+//        File filePH = new File(filename);
+//        
+//        List<String> temp = new ArrayList<String>();
+//        String line = "";
+//        String delimiter = " [|] ";
+//        String[] seperated;
+//        
+//         try{
+//            BufferedReader br = new BufferedReader(new FileReader(filePH));
+//            
+//            while((line = br.readLine()) != null){
+//                seperated = line.split(delimiter);
+//                temp = Arrays.asList(seperated);
+//                super.events.add(new Event(temp.get(1), temp.get(0), temp.get(2), temp.get(3), temp.get(4)));
+//            }
+//            
+//        } catch(Exception e){
+//            e.printStackTrace();
+//        }
         
     }
 
@@ -55,7 +55,6 @@ public class PSVDCParser extends DCDataParser{
             w = new FileWriter("DLSU Unicalendar.psv");
             
             for(int i = 0; i < events.size(); i++){
-                if(events.get(i).holiday == false){
                     w.write(events.get(i).name);
                     w.write(" | ");
                     w.write(events.get(i).month+ "/" +events.get(i).day+ "/" +events.get(i).year);
@@ -63,12 +62,11 @@ public class PSVDCParser extends DCDataParser{
                     w.write(events.get(i).color);
                     w.append("\n");
                     System.out.println("wrote psv");
-                }
             }
             w.close();
             
         } catch (IOException ex) {
-            Logger.getLogger(CSVDCParser.class.getName()).log(Level.SEVERE, null, ex);
+            ex.printStackTrace();
         }
     }
 }
