@@ -65,8 +65,16 @@ public class theView {
     public JLabel cmbYearInput, cmbMonthInput, cmbDayInput;
     public JButton addBtnEvent = new JButton("Add");
     public JCheckBox isTask;
-    public JComboBox startTime, endTime;
+    public JLabel sTimeLabel; //start time label
+    public JLabel eTimeLabel; //end time label
+    public JComboBox startTime, endTime; //fixing positions
     public JToggleButton isDay, isAgenda;
+    
+    public JLabel nameEvent; //name of event/to-do item
+    public JTextField eName = new JTextField(); //textfield for events
+    public JButton aEvent; //add the event
+    
+    public JLabel isToDoList; //label for to-do list
 
     /**
      * ** Calendar Table Components **
@@ -137,7 +145,7 @@ public class theView {
         self = this;
 
         frmMain = new JFrame("Calendar Application");
-        frmMain.setSize(1368, 720);
+        frmMain.setSize(1068, 720); //I made it smaller ok cause i feel like it's too big hahaha
         pane = frmMain.getContentPane();
         pane.setLayout(null);
         frmMain.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -157,6 +165,11 @@ public class theView {
         startTime = new JComboBox();
         endTime = new JComboBox();
         pName = new JLabel("Calendar Program");
+        sTimeLabel = new JLabel("Start Time:");
+        eTimeLabel = new JLabel("End Time:");
+        nameEvent = new JLabel("Event Name:");
+        aEvent = new JButton("Add");
+        isToDoList = new JLabel("To-Do Task:");
 
         //adding times to start and end
         int hour = 0, minute = 0;
@@ -213,7 +226,7 @@ public class theView {
         
         calendarPanel.setBorder(BorderFactory.createTitledBorder("Calendar"));
         //added
-        info.setBorder(BorderFactory.createTitledBorder("info"));
+        info.setBorder(BorderFactory.createTitledBorder("Information"));
         dayTab.setBorder(BorderFactory.createTitledBorder("Day"));
         agendaTab.setBorder(BorderFactory.createTitledBorder("Agenda"));
         addTab.setBorder(BorderFactory.createTitledBorder("Add"));
@@ -240,8 +253,14 @@ public class theView {
         calendarPanel.add(eventBox);
         calendarPanel.add(cmbYear);
         calendarPanel.add(isTask);
+        calendarPanel.add(sTimeLabel);
+        calendarPanel.add(eTimeLabel);
         calendarPanel.add(startTime);
         calendarPanel.add(endTime);
+        calendarPanel.add(nameEvent);
+        calendarPanel.add(eName);
+        calendarPanel.add(aEvent);
+        calendarPanel.add(isToDoList);
         calendarPanel.add(cmbYearInput);
         calendarPanel.add(cmbMonthInput);
         calendarPanel.add(cmbDayInput);
@@ -257,31 +276,37 @@ public class theView {
         
         //setBounds pane
         calendarPanel.setBounds(0, 100, 340, 580);
-        info.setBounds(0, 0, 1360, 100);
-        dayTab.setBounds(340, 100, 1020, 580);
-        agendaTab.setBounds(340, 100, 1020, 580);
-        addTab.setBounds(340, 100, 1020, 580);
+        info.setBounds(0, 0, 1060, 100);
+        dayTab.setBounds(340, 100, 720, 580);
+        agendaTab.setBounds(340, 100, 720, 580);
+        addTab.setBounds(340, 100, 720, 580);
         
         //setBounds(x, y, width, height) CP
         monthLabel.setBounds(320 - monthLabel.getPreferredSize().width / 2, 50, 200, 50);
         yearLabel.setBounds(20, 610, 160, 40);
         eventLabel.setBounds(20, 625, 170, 50);
         eventBox.setBounds(90, 640, 150, 20);
+        nameEvent.setBounds(10, 305, 90, 25);
+        eName.setBounds(10, 330, 150, 20);
+        isToDoList.setBounds(10, 350, 90, 25);
         cmbYear.setBounds(460, 610, 160, 40);
-        isTask.setBounds(150, 660, 90, 25);
-        startTime.setBounds(150, 370, 90, 25);
-        endTime.setBounds(150, 400, 90, 25);
+        isTask.setBounds(85, 350, 90, 25);
+        sTimeLabel.setBounds(180, 305, 90, 25);
+        startTime.setBounds(250, 305, 80, 25);
+        eTimeLabel.setBounds(188, 335, 90, 25);
+        aEvent.setBounds(250, 365, 80, 25);
+        endTime.setBounds(250, 335, 80, 25);
         cmbYearInput.setBounds(250, 640, 80, 20);
         cmbMonthInput.setBounds(250, 660, 80, 20);
         cmbDayInput.setBounds(250, 680, 150, 20);
         addBtnEvent.setBounds(90, 660, 60, 45);
         btnPrev.setBounds(9, 25, 50, 25);
-        btnNext.setBounds(261, 25, 50, 25);
-        scrollCalendarTable.setBounds(10, 50, 300, 250); //this is the calendar itself
+        btnNext.setBounds(281, 25, 50, 25);
+        scrollCalendarTable.setBounds(10, 50, 320, 250); //this is the calendar itself
         
         //setBounds info
-        isDay.setBounds(1150, 25, 100, 50);
-        isAgenda.setBounds(1250, 25, 100, 50);
+        isDay.setBounds(850, 25, 100, 50);
+        isAgenda.setBounds(950, 25, 100, 50);
         pName.setBounds(100, 25, 200, 50);
         pName.setFont(new Font("Calibri", Font.PLAIN, 20));
 
