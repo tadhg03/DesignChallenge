@@ -5,6 +5,7 @@
  */
 package designchallengemvc;
 
+import java.awt.Color;
 import java.awt.Container;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
@@ -75,6 +76,14 @@ public class theView {
     public JButton aEvent; //add the event
     
     public JLabel isToDoList; //label for to-do list
+    
+    public JTable dayTable; //main day table
+    public DefaultTableModel dayModel = new DefaultTableModel();
+    public JScrollPane dayScroll;
+    
+    public JTable agendaTable;
+    public DefaultTableModel agendaModel = new DefaultTableModel();
+    public JScrollPane agendaScroll;
 
     /**
      * ** Calendar Table Components **
@@ -161,34 +170,18 @@ public class theView {
         cmbDayInput = new JLabel("Day:");
         isTask = new JCheckBox();
         isDay = new JToggleButton("Day");
-        isAgenda = new JToggleButton("Agena");
+        isAgenda = new JToggleButton("Agenda");
         startTime = new JComboBox();
         endTime = new JComboBox();
-        pName = new JLabel("Calendar Program");
+        pName = new JLabel("Calendar Program AD was here");
         sTimeLabel = new JLabel("Start Time:");
         eTimeLabel = new JLabel("End Time:");
         nameEvent = new JLabel("Event Name:");
         aEvent = new JButton("Add");
         isToDoList = new JLabel("To-Do Task:");
-
-        //adding times to start and end
-        int hour = 0, minute = 0;
-        String time;
-        for (int i = 0; i < 48; i++) {
-            if (minute == 0) {
-                time = hour + ":00";
-            } else {
-                time = hour + ":" + minute;
-            }
-            startTime.addItem(time);
-            endTime.addItem(time);
-            minute += 30;
-            if (minute / 30 == 2) {
-                minute = 0;
-                hour++;
-            }
-        }
-
+        dayTable = new JTable(dayModel);
+        agendaTable = new JTable(agendaModel);
+        
         btnPrev = new JButton("<<");
         btnNext = new JButton(">>");
         modelCalendarTable = new DefaultTableModel() {
@@ -196,7 +189,7 @@ public class theView {
                 return false;
             }
         };
-
+        
         calendarTable = new JTable(modelCalendarTable);
         calendarTable.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent evt) {
@@ -215,7 +208,7 @@ public class theView {
 
             }
         });
-
+        
         scrollCalendarTable = new JScrollPane(calendarTable);
         calendarPanel = new JPanel(null);
         //added
@@ -223,6 +216,9 @@ public class theView {
         dayTab = new JPanel(null);
         agendaTab = new JPanel(null);
         addTab = new JPanel(null);
+        dayScroll = new JScrollPane(dayTable);
+        agendaScroll = new JScrollPane(agendaTable);
+        agendaTab.setVisible(false); //initially only the day is shown
         
         calendarPanel.setBorder(BorderFactory.createTitledBorder("Calendar"));
         //added
@@ -274,6 +270,12 @@ public class theView {
         info.add(isAgenda);
         info.add(pName);
         
+        //day
+        dayTab.add(dayScroll);
+        
+        //agenda
+        agendaTab.add(agendaScroll);
+        
         //setBounds pane
         calendarPanel.setBounds(0, 100, 340, 580);
         info.setBounds(0, 0, 1060, 100);
@@ -296,13 +298,15 @@ public class theView {
         eTimeLabel.setBounds(188, 335, 90, 25);
         aEvent.setBounds(250, 365, 80, 25);
         endTime.setBounds(250, 335, 80, 25);
-        cmbYearInput.setBounds(250, 640, 80, 20);
-        cmbMonthInput.setBounds(250, 660, 80, 20);
-        cmbDayInput.setBounds(250, 680, 150, 20);
+        cmbYearInput.setBounds(250, 390, 80, 20);
+        cmbMonthInput.setBounds(250, 410, 80, 20);
+        cmbDayInput.setBounds(250, 430, 150, 20);
         addBtnEvent.setBounds(90, 660, 60, 45);
         btnPrev.setBounds(9, 25, 50, 25);
         btnNext.setBounds(281, 25, 50, 25);
         scrollCalendarTable.setBounds(10, 50, 320, 250); //this is the calendar itself
+        dayScroll.setBounds(10, 25, 700, 550);
+        agendaScroll.setBounds(10, 25, 700, 550);
         
         //setBounds info
         isDay.setBounds(850, 25, 100, 50);
@@ -324,6 +328,11 @@ public class theView {
         for (int i = 0; i < 7; i++) {
             modelCalendarTable.addColumn(headers[i]);
         }
+        dayModel.addColumn("Time");
+        dayModel.addColumn("Events");
+        
+        agendaModel.addColumn("Time");
+        agendaModel.addColumn("Tasks");
 
         calendarTable.getParent().setBackground(calendarTable.getBackground()); //Set background
 
@@ -337,9 +346,38 @@ public class theView {
         calendarTable.setRowHeight(41);
         modelCalendarTable.setColumnCount(7);
         modelCalendarTable.setRowCount(6);
+        
+        dayTable.setRowHeight(41);
+        dayModel.setColumnCount(2);
+        dayModel.setRowCount(48);
+        
+        agendaTable.setRowHeight(41);
+        agendaModel.setColumnCount(2);
+        agendaModel.setRowCount(50);
+        agendaTable.setShowGrid(false);
 
         for (int i = yearBound - 100; i <= yearBound + 100; i++) {
             cmbYear.addItem(String.valueOf(i));
+        }
+        
+        //adding times to start and end
+        int hour = 0, minute = 0;
+        String time;
+        for (int i = 0; i < 48; i++) {
+            if (minute == 0) {
+                time = hour + ":00";
+            } else {
+                time = hour + ":" + minute;
+            }
+            startTime.addItem(time);
+            endTime.addItem(time);
+            dayTable.setValueAt(time, i, 0);
+            
+            minute += 30;
+            if (minute / 30 == 2) {
+                minute = 0;
+                hour++;
+            }
         }
 
         refreshCalendar(monthBound, yearBound); //Refresh calendar
