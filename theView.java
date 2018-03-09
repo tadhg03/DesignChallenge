@@ -39,6 +39,7 @@ public class theView {
 
     //self
     public theView self;
+    public theController controller;
 
     /**
      * ** Day Components ***
@@ -89,6 +90,10 @@ public class theView {
      */
     public JTable calendarTable;
     public DefaultTableModel modelCalendarTable;
+    
+    public void attach(theController controller){
+        this.controller = controller;
+    }
 
     public void refreshCalendar(int month, int year) {
         String[] months = {"January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"};
@@ -123,17 +128,17 @@ public class theView {
         for (i = 1; i <= nod; i++) {
             int row = new Integer((i + som - 2) / 7);
             int column = (i + som - 2) % 7;
-            modelCalendarTable.setValueAt(i, row, column);
+            modelCalendarTable.setValueAt(i + "\n", row, column);
 
         }
 
         for (i = 0; i < 6; i++) { //for checking if days are the same
             for (j = 0; j < 7; j++) {
                 if (modelCalendarTable.getValueAt(i, j) != null) {
-                    String val = modelCalendarTable.getValueAt(i, j).toString();
+                    String val = modelCalendarTable.getValueAt(i, j).toString().split("\n")[0];
                     for (int k = 0; k < events.size(); k++) {
                         if (Integer.parseInt(val) == events.get(k).day && month + 1 == events.get(k).month && year == events.get(k).year) {
-                            modelCalendarTable.setValueAt(modelCalendarTable.getValueAt(i, j) + " " + events.get(k).name, i, j); //change to not edit the calendar
+                            modelCalendarTable.setValueAt(modelCalendarTable.getValueAt(i, j) + "\uFFEE ", i, j); //change to not edit the calendar
                         }
                     }
                 }
@@ -194,7 +199,7 @@ public class theView {
             public void mouseClicked(MouseEvent evt) {
                 int col = calendarTable.getSelectedColumn();
                 int row = calendarTable.getSelectedRow();
-                String[] parts = modelCalendarTable.getValueAt(row, col).toString().split(" ");
+                String[] parts = modelCalendarTable.getValueAt(row, col).toString().split("\n");
                 //System.out.println(col + ", " + row);
 
                 YearInputLabel.setText("Year: " + cmbYear.getSelectedItem());
@@ -478,7 +483,7 @@ public class theView {
                 int col = calendarTable.getSelectedColumn();
                 int row = calendarTable.getSelectedRow();
 
-                modelCalendarTable.setValueAt(modelCalendarTable.getValueAt(row, col) + "\n\uFFEE", row, col);
+                modelCalendarTable.setValueAt(modelCalendarTable.getValueAt(row, col) + "\uFFEE ", row, col);
 
                 int month; //added until
 
@@ -500,10 +505,10 @@ public class theView {
                 } else {
                     events.add(new Event(date, eventBox.getText(), "Blue", startTime.getSelectedItem().toString(), endTime.getSelectedItem().toString())); //add drop box first for start and end time
                 }
-//                PSVDCParser psvDataParser = new PSVDCParser(self);
-//
-//                psvDataParser.writeData(events);
-
+                
+                controller.writeData(events);
+                
+                eventBox.setText("");
             }
         }
     }
