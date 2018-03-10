@@ -148,6 +148,8 @@ public class theView {
         }
 
         calendarTable.setDefaultRenderer(calendarTable.getColumnClass(0), new TableRenderer(events));
+        //agendaTable.setDefaultRenderer(agendaTable.getColumnClass(0), new DayAgendaRenderer(events));
+        dayTable.setDefaultRenderer(dayTable.getColumnClass(0), new DayAgendaRenderer(events));
     }
 
     public theView() {
