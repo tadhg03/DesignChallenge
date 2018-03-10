@@ -73,6 +73,7 @@ public class theView {
     public JLabel eTimeLabel; //end time label
     public JComboBox startTime, endTime; //fixing positions
     public JToggleButton isDay, isAgenda;
+    public JButton deleteBtnEvent = new JButton("Delete");
 
     public JLabel nameEvent; //name of event/to-do item
 
@@ -139,7 +140,7 @@ public class theView {
                     String val = modelCalendarTable.getValueAt(i, j).toString().split("\n")[0];
                     for (int k = 0; k < events.size(); k++) {
                         if (Integer.parseInt(val) == events.get(k).day && month + 1 == events.get(k).month && year == events.get(k).year) {
-                            modelCalendarTable.setValueAt(modelCalendarTable.getValueAt(i, j) + "\uFFEE ", i, j); //change to not edit the calendar
+                            modelCalendarTable.setValueAt(modelCalendarTable.getValueAt(i, j) + "\u25EF ", i, j); //change to not edit the calendar
                         }
                     }
                 }
@@ -255,6 +256,7 @@ public class theView {
         btnPrev.addActionListener(new btnPrev_Action());
         btnNext.addActionListener(new btnNext_Action());
         addBtnEvent.addActionListener(new btnAddEvent_Action());
+        deleteBtnEvent.addActionListener(new btnDeleteEvent_Action());
         cmbYear.addActionListener(new cmbYear_Action());
         //added
         isDay.addActionListener(new isDay_Action());
@@ -284,6 +286,7 @@ public class theView {
         calendarPanel.add(MonthInputLabel);
         calendarPanel.add(DayInputLabel);
         calendarPanel.add(addBtnEvent);
+        calendarPanel.add(deleteBtnEvent);
         calendarPanel.add(btnPrev);
         calendarPanel.add(btnNext);
         calendarPanel.add(scrollCalendarTable);
@@ -324,6 +327,8 @@ public class theView {
         MonthInputLabel.setBounds(250, 410, 80, 20);
         DayInputLabel.setBounds(250, 430, 150, 20);
         addBtnEvent.setBounds(250, 365, 80, 25);
+        deleteBtnEvent.setBounds(10, 380, 80, 25);
+        
         btnPrev.setBounds(9, 25, 50, 25);
         btnNext.setBounds(281, 25, 50, 25);
         scrollCalendarTable.setBounds(10, 50, 320, 250); //this is the calendar itself
@@ -685,6 +690,15 @@ public class theView {
                 eventBox.setText("");
             }
         }
+    }
+    
+    class btnDeleteEvent_Action implements ActionListener{
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            System.out.println("clicked delete");
+        }
+    
     }
 
     class isDay_Action implements ActionListener {
