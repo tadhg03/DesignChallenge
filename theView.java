@@ -660,7 +660,7 @@ public class theView {
                 int col = calendarTable.getSelectedColumn();
                 int row = calendarTable.getSelectedRow();
 
-                modelCalendarTable.setValueAt(modelCalendarTable.getValueAt(row, col) + "\uFFEE ", row, col);
+                modelCalendarTable.setValueAt(modelCalendarTable.getValueAt(row, col) + "\u25EF ", row, col);
 
                 int month; //added until
 
@@ -685,8 +685,9 @@ public class theView {
                     events.add(new Event(date, eventBox.getText(), "Blue", startTime.getSelectedItem().toString(), endTime.getSelectedItem().toString())); //add drop box first for start and end time
                 }
                 
-                controller.writeData(events);
+                controller.writeData(events, false);
                 
+                dayTable.setValueAt(eventBox.getText(), TimeToRowNumber(startTime.getSelectedItem().toString()), 1);
                 eventBox.setText("");
             }
         }
@@ -697,6 +698,12 @@ public class theView {
         @Override
         public void actionPerformed(ActionEvent e) {
             System.out.println("clicked delete");
+            int col = dayTable.getSelectedColumn();
+            int row = dayTable.getSelectedRow();
+            System.out.println(dayTable.getValueAt(dayTable.getSelectedRow(), dayTable.getSelectedColumn()));
+            
+            controller.deleteData(events, dayTable.getValueAt(dayTable.getSelectedRow(), dayTable.getSelectedColumn()).toString());
+            dayTable.setValueAt("", row, col);
         }
     
     }

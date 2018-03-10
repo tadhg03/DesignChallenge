@@ -24,11 +24,14 @@ public class theController {
         view.attach(this);
     }
     
-    public void writeData(ArrayList<Event> events){
+    public void writeData(ArrayList<Event> events, boolean delete){
         FileWriter w;
         
         try {
-            w = new FileWriter("DLSU Unicalendar.psv");
+            if(delete)
+                w = new FileWriter("DLSU Unicalendar.psv", false);
+            else
+                w = new FileWriter("DLSU Unicalendar.psv");
             
             for(int i = 0; i < events.size(); i++){
                     w.write(events.get(i).name);
@@ -48,6 +51,19 @@ public class theController {
         } catch (IOException ex) {
             ex.printStackTrace();
         }
+    }
+    
+    public void deleteData(ArrayList<Event> events, String name){
+        int month = 0, year = 0;
+        for(int i = 0; i < events.size(); i++){
+            if(events.get(i).name.equals(name)){
+                month = events.get(i).month - 1;
+                year = events.get(i).year;
+                events.remove(i);
+            }
+        }
+        writeData(events, true);
+        view.refreshCalendar(month, year);
     }
     
     
