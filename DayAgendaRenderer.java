@@ -180,13 +180,11 @@ public class DayAgendaRenderer extends DefaultTableCellRenderer{
         for(int i = 0; i < events.size(); i++){
             
             if("Blue".equals(events.get(i).color)){
-                if(row == TimeToRowNumber(events.get(i).startTime) && column == 1)
-                comp.setBackground(Color.BLUE);
+                comp.setBackground(row == TimeToRowNumber(events.get(i).startTime) && column == 1 ? Color.BLUE : Color.WHITE);
             }
             
             if("Green".equals(events.get(i).color)){
-                if(row == TimeToRowNumber(events.get(i).startTime) && column == 1)
-                    comp.setBackground(Color.GREEN);
+                    comp.setBackground(row == TimeToRowNumber(events.get(i).startTime) && column == 1 ? Color.GREEN : Color.WHITE);
             }
         }
         
