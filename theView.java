@@ -3,8 +3,10 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package designchallengemvc;
+package View;
 
+import Controller.theController;
+import designchallengemvc.Event;
 import java.awt.Color;
 import java.awt.Container;
 import java.awt.Font;
@@ -224,8 +226,8 @@ public class theView {
 
                 //When you click on a day in calendar, it's gonna show the events & to-do tasks on that day
                 for (int i = 0; i < events.size(); i++) {
-                    if (events.get(i).month == MonthToInt(monthLabel.getText()) && events.get(i).day == Integer.parseInt(parts[0]) && events.get(i).year == Integer.parseInt(cmbYear.getSelectedItem().toString())) {
-                        dayTable.setValueAt(events.get(i).name, TimeToRowNumber(events.get(i).startTime), 1);
+                    if (events.get(i).month == controller.MonthToInt(monthLabel.getText()) && events.get(i).day == Integer.parseInt(parts[0]) && events.get(i).year == Integer.parseInt(cmbYear.getSelectedItem().toString())) {
+                        dayTable.setValueAt(events.get(i).name, controller.TimeToRowNumber(events.get(i).startTime), 1);
                         if (events.get(i).color.equalsIgnoreCase("green")) {
                             agendaModel.addRow(new Object[]{events.get(i).startTime, events.get(i).name});
                         } else {
@@ -241,7 +243,7 @@ public class theView {
 
                 int month; //added until
 
-                month = MonthToInt(monthLabel.getText());
+                month = controller.MonthToInt(monthLabel.getText());
 
             }
         });
@@ -266,13 +268,14 @@ public class theView {
 
         btnPrev.addActionListener(new btnPrev_Action());
         btnNext.addActionListener(new btnNext_Action());
+        cmbYear.addActionListener(new cmbYear_Action());
+        //added
         addBtnEvent.addActionListener(new btnAddEvent_Action());
         deleteBtnEvent.addActionListener(new btnDeleteEvent_Action());
         doneBtnAgenda.addActionListener(new btnDoneAgenda_Action());
-        cmbYear.addActionListener(new cmbYear_Action());
-        //added
         isDay.addActionListener(new isDay_Action());
         isAgenda.addActionListener(new isAgenda_Action());
+        isTask.addActionListener(new isTask_Action());
 
         //pane
         pane.add(calendarPanel);
@@ -427,203 +430,6 @@ public class theView {
         refreshCalendar(monthBound, yearBound); //Refresh calendar
     }
 
-    private int TimeToRowNumber(String eTime) {
-
-        switch (eTime) {
-
-            case "0:30":
-                return 1;
-
-            case "1:00":
-                return 2;
-
-            case "1:30":
-                return 3;
-
-            case "2:00":
-                return 4;
-
-            case "2:30":
-                return 5;
-
-            case "3:00":
-                return 6;
-
-            case "3:30":
-                return 7;
-
-            case "4:00":
-                return 8;
-
-            case "4:30":
-                return 9;
-
-            case "5:00":
-                return 10;
-
-            case "5:30":
-                return 11;
-
-            case "6:00":
-                return 12;
-
-            case "6:30":
-                return 13;
-
-            case "7:00":
-                return 14;
-
-            case "7:30":
-                return 15;
-
-            case "8:00":
-                return 16;
-
-            case "8:30":
-                return 17;
-
-            case "9:00":
-                return 18;
-
-            case "9:30":
-                return 19;
-
-            case "10:00":
-                return 20;
-
-            case "10:30":
-                return 21;
-
-            case "11:00":
-                return 22;
-
-            case "11:30":
-                return 23;
-
-            case "12:00":
-                return 24;
-
-            case "12:30":
-                return 25;
-
-            case "13:00":
-                return 26;
-
-            case "13:30":
-                return 27;
-
-            case "14:00":
-                return 28;
-
-            case "14:30":
-                return 29;
-
-            case "15:00":
-                return 30;
-
-            case "15:30":
-                return 31;
-
-            case "16:00":
-                return 32;
-
-            case "16:30":
-                return 33;
-
-            case "17:00":
-                return 34;
-
-            case "17:30":
-                return 35;
-
-            case "18:00":
-                return 36;
-
-            case "18:30":
-                return 37;
-
-            case "19:00":
-                return 38;
-
-            case "19:30":
-                return 39;
-
-            case "20:00":
-                return 40;
-
-            case "20:30":
-                return 41;
-
-            case "21:00":
-                return 42;
-
-            case "21:30":
-                return 43;
-
-            case "22:00":
-                return 44;
-
-            case "22:30":
-                return 45;
-
-            case "23:00":
-                return 46;
-
-            case "23:30":
-                return 47;
-
-            //if time is 0:00    
-            default:
-                return 0;
-        }
-    }
-
-    private int MonthToInt(String month) {
-
-        switch (month.toLowerCase()) {
-            case "january":
-                return 1;
-
-            case "february":
-                return 2;
-
-            case "march":
-                return 3;
-
-            case "april":
-                return 4;
-
-            case "may":
-                return 5;
-
-            case "june":
-                return 6;
-
-            case "july":
-                return 7;
-
-            case "august":
-                return 8;
-
-            case "september":
-                return 9;
-
-            case "october":
-                return 10;
-
-            case "november":
-                return 11;
-
-            case "december":
-                return 12;
-
-            default:
-                return 0;
-
-        }
-
-    }
-
     private int timeToInt(String time) {
 
         int result = Integer.parseInt(time.split(":")[0] + "" + time.split(":")[1]);
@@ -641,7 +447,7 @@ public class theView {
             int eStart = timeToInt(events.get(i).startTime);
             int eEnd = timeToInt(events.get(i).endTime);
 
-            if (Integer.parseInt(YearInputLabel.getText().split(": ")[1]) == events.get(i).year && MonthToInt(MonthInputLabel.getText().split(": ")[1]) == events.get(i).month && Integer.parseInt(DayInputLabel.getText().split(": ")[1]) == events.get(i).day) {
+            if (Integer.parseInt(YearInputLabel.getText().split(": ")[1]) == events.get(i).year && controller.MonthToInt(MonthInputLabel.getText().split(": ")[1]) == events.get(i).month && Integer.parseInt(DayInputLabel.getText().split(": ")[1]) == events.get(i).day) {
                 System.out.println(events.get(i).toString());
                 System.out.println("checking using these: \n");
 
@@ -727,7 +533,7 @@ public class theView {
 
                 String[] MonthParts = MonthInputLabel.getText().split(" ");
 
-                month = MonthToInt(MonthParts[1]);
+                month = controller.MonthToInt(MonthParts[1]);
 
                 String[] parts = DayInputLabel.getText().split(" ");
                 String[] parts2 = YearInputLabel.getText().split(" ");
@@ -748,11 +554,16 @@ public class theView {
                     }
                 } else {
                     events.add(new Event(date, eventBox.getText(), "Blue", startTime.getSelectedItem().toString(), endTime.getSelectedItem().toString()));
+                    for (int i = 0; i < events.size(); i++) {
+                        if (events.get(i).name.equals(eventBox.getText())) {
+                            agendaModel.addRow(new Object[]{events.get(i).startTime, events.get(i).name});
+                        }
+                    }
                 }
 
                 controller.writeData(events, false);
 
-                dayTable.setValueAt(eventBox.getText(), TimeToRowNumber(startTime.getSelectedItem().toString()), 1);
+                dayTable.setValueAt(eventBox.getText(), controller.TimeToRowNumber(startTime.getSelectedItem().toString()), 1);
                 eventBox.setText("");
 
             }
@@ -825,6 +636,19 @@ public class theView {
             isDay.setSelected(false);
         }
 
+    }
+    
+    class isTask_Action implements ActionListener {
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            if(isTask.isSelected()){
+                endTime.setEnabled(false);
+            }else{
+                endTime.setEnabled(true);
+            }
+        }
+        
     }
 
     public void setEvents(ArrayList<Event> events) {

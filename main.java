@@ -5,6 +5,10 @@
  */
 package designchallengemvc;
 
+import View.theView;
+import Model.theModel;
+import Controller.theController;
+
 /**
  *
  * @author Tadhg

@@ -2,8 +2,9 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package designchallengemvc;
+package View;
 
+import designchallengemvc.Event;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.logging.Level;
