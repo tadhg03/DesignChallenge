@@ -13,8 +13,10 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.GregorianCalendar;
 import java.util.Iterator;
+import java.util.List;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
@@ -27,8 +29,12 @@ import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.JToggleButton;
 import javax.swing.ListSelectionModel;
+import javax.swing.RowSorter;
+import javax.swing.SortOrder;
 import javax.swing.UIManager;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableModel;
+import javax.swing.table.TableRowSorter;
 
 /**
  *
@@ -36,7 +42,7 @@ import javax.swing.table.DefaultTableModel;
  */
 public class theView {
 
-    private ArrayList<Event> events = new ArrayList<>();
+    private ArrayList<Event> events = new ArrayList<>(); //events
 
     //self
     public theView self;
@@ -74,6 +80,7 @@ public class theView {
     public JComboBox startTime, endTime; //fixing positions
     public JToggleButton isDay, isAgenda;
     public JButton deleteBtnEvent = new JButton("Delete");
+    public JButton doneBtnAgenda = new JButton("Done");
 
     public JLabel nameEvent; //name of event/to-do item
 
@@ -92,8 +99,8 @@ public class theView {
      */
     public JTable calendarTable;
     public DefaultTableModel modelCalendarTable;
-    
-    public void attach(theController controller){
+
+    public void attach(theController controller) {
         this.controller = controller;
     }
 
@@ -148,8 +155,6 @@ public class theView {
         }
 
         calendarTable.setDefaultRenderer(calendarTable.getColumnClass(0), new TableRenderer(events));
-        //agendaTable.setDefaultRenderer(agendaTable.getColumnClass(0), new DayAgendaRenderer(events));
-        dayTable.setDefaultRenderer(dayTable.getColumnClass(0), new DayAgendaRenderer(events));
     }
 
     public theView() {
@@ -204,23 +209,27 @@ public class theView {
                 int col = calendarTable.getSelectedColumn();
                 int row = calendarTable.getSelectedRow();
                 String[] parts = modelCalendarTable.getValueAt(row, col).toString().split("\n");
+
                 //System.out.println(col + ", " + row);
-                
                 //Clearing the events & to-do tasks whenever you click on a different day
-                for(int i = 0; i < 48; i++){
-                dayTable.setValueAt("", i, 1);
+                for (int i = 0; i < 48; i++) {
+                    dayTable.setValueAt("", i, 1);
                 }
-                
+
+                //clearning the agendas whenever you click on a different day
+                int rowCount = agendaModel.getRowCount();
+                for (int i = rowCount - 1; i >= 0; i--) {
+                    agendaModel.removeRow(i);
+                }
+
                 //When you click on a day in calendar, it's gonna show the events & to-do tasks on that day
                 for (int i = 0; i < events.size(); i++) {
-                    if(events.get(i).month == MonthToInt(monthLabel.getText()) && events.get(i).day == Integer.parseInt(parts[0]) && events.get(i).year == Integer.parseInt(cmbYear.getSelectedItem().toString())){
-                        //Events only displays in Day, not Agenda
-                        if(events.get(i).color.equals("Blue"))    
-                            dayTable.setValueAt(events.get(i).name ,TimeToRowNumber(events.get(i).startTime) ,1);
-                        //To-Do Tasks shows up in both. Coloring is the only problem we have now
-                        else{
-                            dayTable.setValueAt(events.get(i).name ,TimeToRowNumber(events.get(i).startTime) ,1);
-                            agendaTable.setValueAt(events.get(i).name ,TimeToRowNumber(events.get(i).startTime) ,1);
+                    if (events.get(i).month == MonthToInt(monthLabel.getText()) && events.get(i).day == Integer.parseInt(parts[0]) && events.get(i).year == Integer.parseInt(cmbYear.getSelectedItem().toString())) {
+                        dayTable.setValueAt(events.get(i).name, TimeToRowNumber(events.get(i).startTime), 1);
+                        if (events.get(i).color.equalsIgnoreCase("green")) {
+                            agendaModel.addRow(new Object[]{events.get(i).startTime, events.get(i).name});
+                        } else {
+                            agendaModel.addRow(new Object[]{events.get(i).startTime + " - " + events.get(i).endTime, events.get(i).name});
                         }
                     }
                 }
@@ -259,6 +268,7 @@ public class theView {
         btnNext.addActionListener(new btnNext_Action());
         addBtnEvent.addActionListener(new btnAddEvent_Action());
         deleteBtnEvent.addActionListener(new btnDeleteEvent_Action());
+        doneBtnAgenda.addActionListener(new btnDoneAgenda_Action());
         cmbYear.addActionListener(new cmbYear_Action());
         //added
         isDay.addActionListener(new isDay_Action());
@@ -304,6 +314,7 @@ public class theView {
 
         //agenda
         agendaTab.add(agendaScroll);
+        agendaTab.add(doneBtnAgenda);
 
         //setBounds pane
         calendarPanel.setBounds(0, 100, 340, 580);
@@ -330,12 +341,13 @@ public class theView {
         DayInputLabel.setBounds(250, 430, 150, 20);
         addBtnEvent.setBounds(250, 365, 80, 25);
         deleteBtnEvent.setBounds(10, 380, 80, 25);
-        
+        doneBtnAgenda.setBounds(100, 525, 80, 25);
+
         btnPrev.setBounds(9, 25, 50, 25);
         btnNext.setBounds(281, 25, 50, 25);
         scrollCalendarTable.setBounds(10, 50, 320, 250); //this is the calendar itself
         dayScroll.setBounds(10, 25, 700, 550);
-        agendaScroll.setBounds(10, 25, 700, 550);
+        agendaScroll.setBounds(10, 25, 700, 500); //550 originally
 
         //setBounds info
         isDay.setBounds(850, 25, 100, 50);
@@ -384,7 +396,7 @@ public class theView {
 
         agendaTable.setRowHeight(41);
         agendaModel.setColumnCount(2);
-        agendaModel.setRowCount(48);
+        //agendaModel.setRowCount(48);
         agendaTable.setShowGrid(true);
 
         for (int i = yearBound - 100; i <= yearBound + 100; i++) {
@@ -403,7 +415,7 @@ public class theView {
             startTime.addItem(time);
             endTime.addItem(time);
             dayTable.setValueAt(time, i, 0);
-            agendaTable.setValueAt(time, i, 0);
+            //agendaTable.setValueAt(time, i, 0);
 
             minute += 30;
             if (minute / 30 == 2) {
@@ -414,152 +426,152 @@ public class theView {
 
         refreshCalendar(monthBound, yearBound); //Refresh calendar
     }
-    
-    private int TimeToRowNumber(String eTime){
-        
-        switch(eTime){
-            
+
+    private int TimeToRowNumber(String eTime) {
+
+        switch (eTime) {
+
             case "0:30":
                 return 1;
-                
+
             case "1:00":
                 return 2;
-                
+
             case "1:30":
                 return 3;
-                
+
             case "2:00":
                 return 4;
-            
+
             case "2:30":
                 return 5;
-                
+
             case "3:00":
                 return 6;
-                
+
             case "3:30":
                 return 7;
-                
+
             case "4:00":
                 return 8;
-                
+
             case "4:30":
                 return 9;
-                
+
             case "5:00":
                 return 10;
-                
+
             case "5:30":
                 return 11;
-                
+
             case "6:00":
                 return 12;
-            
+
             case "6:30":
                 return 13;
-                
+
             case "7:00":
                 return 14;
-                
+
             case "7:30":
                 return 15;
-                
+
             case "8:00":
                 return 16;
-                
+
             case "8:30":
                 return 17;
-                
+
             case "9:00":
                 return 18;
-                
+
             case "9:30":
                 return 19;
-                
+
             case "10:00":
                 return 20;
-            
+
             case "10:30":
                 return 21;
-                
+
             case "11:00":
                 return 22;
-                
+
             case "11:30":
                 return 23;
-                
+
             case "12:00":
                 return 24;
-                
+
             case "12:30":
                 return 25;
-                
+
             case "13:00":
                 return 26;
-                
+
             case "13:30":
                 return 27;
-                
+
             case "14:00":
                 return 28;
-            
+
             case "14:30":
                 return 29;
-                
+
             case "15:00":
                 return 30;
-                
+
             case "15:30":
                 return 31;
-                
+
             case "16:00":
                 return 32;
-                
+
             case "16:30":
                 return 33;
-                
+
             case "17:00":
                 return 34;
-                
+
             case "17:30":
                 return 35;
-                
+
             case "18:00":
                 return 36;
-            
+
             case "18:30":
                 return 37;
-                
+
             case "19:00":
                 return 38;
-                
+
             case "19:30":
                 return 39;
-                
+
             case "20:00":
                 return 40;
-                
+
             case "20:30":
                 return 41;
-                
+
             case "21:00":
                 return 42;
-                
+
             case "21:30":
                 return 43;
-                
+
             case "22:00":
                 return 44;
-            
+
             case "22:30":
                 return 45;
-                
+
             case "23:00":
                 return 46;
-                
+
             case "23:30":
-                return 47;    
-            
+                return 47;
+
             //if time is 0:00    
             default:
                 return 0;
@@ -612,6 +624,50 @@ public class theView {
 
     }
 
+    private int timeToInt(String time) {
+
+        int result = Integer.parseInt(time.split(":")[0] + "" + time.split(":")[1]);
+
+        return result;
+    }
+
+    private boolean conflicts(String start, String end) {
+
+        int iStart = timeToInt(start);
+        int iEnd = timeToInt(end);
+        int check = 0, count = 0;
+
+        for (int i = 0; i < events.size(); i++) {
+            int eStart = timeToInt(events.get(i).startTime);
+            int eEnd = timeToInt(events.get(i).endTime);
+
+            if (Integer.parseInt(YearInputLabel.getText().split(": ")[1]) == events.get(i).year && MonthToInt(MonthInputLabel.getText().split(": ")[1]) == events.get(i).month && Integer.parseInt(DayInputLabel.getText().split(": ")[1]) == events.get(i).day) {
+                System.out.println(events.get(i).toString());
+                System.out.println("checking using these: \n");
+
+                System.out.println("iStart: " + iStart);
+                System.out.println("iEnd: " + iEnd);
+                System.out.println("eStart" + eStart);
+                System.out.println("eEnd" + eEnd);
+
+                count++;
+
+                //start is inbetween estart and eend || start is equal to e start || end is inbetween || end is equal || start is before start and end is after end
+                if (!(iStart >= eStart && iStart < eEnd || iStart == eStart || iEnd > eStart && iEnd <= eEnd || iStart <= eStart && iEnd >= eEnd)) {
+                    check++;
+                }
+            }
+        }
+
+        if (check == count) {
+            System.out.println("valid time");
+            return true;
+        } else {
+            System.out.println("invalid time");
+            return false;
+        }
+    }
+
     class btnPrev_Action implements ActionListener {
 
         public void actionPerformed(ActionEvent e) {
@@ -654,10 +710,13 @@ public class theView {
         @Override
         public void actionPerformed(ActionEvent e) {
 
-            System.out.println(YearInputLabel.getText());
-            System.out.println(MonthInputLabel.getText());
-            System.out.println(DayInputLabel.getText());
-            if (YearInputLabel.getText() != null && MonthInputLabel.getText() != null && DayInputLabel.getText() != null) {
+            String strStart = startTime.getSelectedItem().toString();
+            String strEnd = endTime.getSelectedItem().toString();
+
+            int iStart = timeToInt(strStart);
+            int iEnd = timeToInt(strEnd);
+
+            if (YearInputLabel.getText() != null && MonthInputLabel.getText() != null && DayInputLabel.getText() != null && iStart <= iEnd && conflicts(strStart, strEnd)) { //you have to add months to this because it checks all events not just events of the specific day
                 System.out.println("in");
                 int col = calendarTable.getSelectedColumn();
                 int row = calendarTable.getSelectedRow();
@@ -678,36 +737,70 @@ public class theView {
                 System.out.println(parts[1]);
                 System.out.println(parts2[1]);
                 System.out.println(month);
-                
+
                 //what i'm planning to do is for the to-do tasks, we make a function that passes the start time, and that function "adds" 30 mins
-                
                 if (isTask.isSelected()) {
-                    events.add(new Event(date, eventBox.getText(), "Green", startTime.getSelectedItem().toString(), endTime.getSelectedItem().toString())); //add drop box first for start and end time
+                    events.add(new Event(date, eventBox.getText(), "Green", startTime.getSelectedItem().toString(), startTime.getSelectedItem().toString())); //start time and end time for tasks are the same, we can change it if we need it to be + 30 minutes but i think it should be fine
+                    for (int i = 0; i < events.size(); i++) {
+                        if (events.get(i).name.equals(eventBox.getText())) {
+                            agendaModel.addRow(new Object[]{events.get(i).startTime, events.get(i).name});
+                        }
+                    }
                 } else {
-                    events.add(new Event(date, eventBox.getText(), "Blue", startTime.getSelectedItem().toString(), endTime.getSelectedItem().toString())); //add drop box first for start and end time
+                    events.add(new Event(date, eventBox.getText(), "Blue", startTime.getSelectedItem().toString(), endTime.getSelectedItem().toString()));
                 }
-                
+
                 controller.writeData(events, false);
-                
+
                 dayTable.setValueAt(eventBox.getText(), TimeToRowNumber(startTime.getSelectedItem().toString()), 1);
                 eventBox.setText("");
+
             }
         }
     }
-    
-    class btnDeleteEvent_Action implements ActionListener{
+
+    class btnDeleteEvent_Action implements ActionListener {
 
         @Override
         public void actionPerformed(ActionEvent e) {
             System.out.println("clicked delete");
             int col = dayTable.getSelectedColumn();
             int row = dayTable.getSelectedRow();
+            String name = dayTable.getValueAt(dayTable.getSelectedRow(), dayTable.getSelectedColumn()).toString();
             System.out.println(dayTable.getValueAt(dayTable.getSelectedRow(), dayTable.getSelectedColumn()));
-            
-            controller.deleteData(events, dayTable.getValueAt(dayTable.getSelectedRow(), dayTable.getSelectedColumn()).toString());
+
+            for (int i = 0; i < events.size(); i++) {
+                if (events.get(i).name.equals(name)) {
+                    agendaModel.removeRow(i);
+                }
+            }
+
+            controller.deleteData(events, name);
             dayTable.setValueAt("", row, col);
+
         }
-    
+
+    }
+
+    class btnDoneAgenda_Action implements ActionListener {
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            int col = agendaTable.getSelectedColumn();
+            int row = agendaTable.getSelectedRow();
+            String name = agendaTable.getValueAt(row, col).toString();
+
+            for (int i = 0; i < events.size(); i++) {
+
+                if (events.get(i).name.equals(name) && events.get(i).color.equalsIgnoreCase("green")) {
+                    controller.deleteData(events, name);
+                    agendaTable.setValueAt(name + " (DONE)", row, col);
+                } else {
+                    System.out.println("Does not work for events");
+                }
+            }
+        }
+
     }
 
     class isDay_Action implements ActionListener {
