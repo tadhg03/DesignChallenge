@@ -214,10 +214,12 @@ public class AgendaDayRenderer extends JTextPane implements TableCellRenderer {
                 } else {
                     sdoc.insertString(sdoc.getLength(), sval, style);
                 }
-
+                
                 for (int i = 0; i < events.size(); i++) {
-                    if ("Blue".equals(events.get(i).color)) {
-                        
+                    if ("Blue".equals(events.get(i).color) && column == 1 && Integer.parseInt(self.DayInputLabel.getText().split(": ")[1]) == events.get(i).day && subs.equals(events.get(i).name)) {
+                        setBackground(Color.BLUE);
+                    } else if("Green".equals(events.get(i).color) && column == 1 && Integer.parseInt(self.DayInputLabel.getText().split(": ")[1]) == events.get(i).day && subs.equals(events.get(i).name)){
+                        setBackground(Color.GREEN);
                     }
                 }
 
