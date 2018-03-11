@@ -228,11 +228,6 @@ public class theView {
                 for (int i = 0; i < events.size(); i++) {
                     if (events.get(i).month == controller.MonthToInt(monthLabel.getText()) && events.get(i).day == Integer.parseInt(parts[0]) && events.get(i).year == Integer.parseInt(cmbYear.getSelectedItem().toString())) {
                         dayTable.setValueAt(events.get(i).name, controller.TimeToRowNumber(events.get(i).startTime), 1);
-                        if (events.get(i).color.equalsIgnoreCase("green")) {
-                            agendaModel.addRow(new Object[]{events.get(i).startTime, events.get(i).name});
-                        } else {
-                            agendaModel.addRow(new Object[]{events.get(i).startTime + " - " + events.get(i).endTime, events.get(i).name});
-                        }
                     }
                 }
 
@@ -241,10 +236,7 @@ public class theView {
                 DayInputLabel.setText("Day: " + parts[0]);
                 dateLabel.setText(monthLabel.getText() + " " + parts[0] + ", " + cmbYear.getSelectedItem());
 
-                int month; //added until
-
-                month = controller.MonthToInt(monthLabel.getText());
-
+                arrangeAgenda();
             }
         });
 
@@ -474,182 +466,249 @@ public class theView {
         }
     }
 
-    class btnPrev_Action implements ActionListener {
+    public void arrangeAgenda() { //testing phase still remove once good
+//        int low = Integer.MAX_VALUE; //gets highest possible integer
+//        int temp = 0;
+//        int count = 0;
+//
+//        ArrayList<Integer> aList = new ArrayList<>();
+//
+//        int rowCount = agendaModel.getRowCount();
+//        for (int i = rowCount - 1; i >= 0; i--) {
+//            agendaModel.removeRow(i);
+//        }
+//
+//        for (int i = 0; i < events.size(); i++) {
+//            if (Integer.parseInt(YearInputLabel.getText().split(": ")[1]) == events.get(i).year && controller.MonthToInt(MonthInputLabel.getText().split(": ")[1]) == events.get(i).month && Integer.parseInt(DayInputLabel.getText().split(": ")[1]) == events.get(i).day) {
+//                aList.add(timeToInt(startTime.toString()));
+//            }
+//        }
+//
+//        Collections.sort(aList);
+//
+//        for (int i = 0; i < events.size(); i++) {
+//            if (Integer.parseInt(YearInputLabel.getText().split(": ")[1]) == events.get(i).year && controller.MonthToInt(MonthInputLabel.getText().split(": ")[1]) == events.get(i).month && Integer.parseInt(DayInputLabel.getText().split(": ")[1]) == events.get(i).day) {
+//                low = aList.get(0);
+//                aList.remove(0);
+//                if (timeToInt(events.get(i).startTime) == low) {
+//                    if (events.get(i).color.equalsIgnoreCase("green")) {
+//                        agendaModel.addRow(new Object[]{events.get(i).startTime, events.get(i).name});
+//                    } else {
+//                        agendaModel.addRow(new Object[]{events.get(i).startTime + " - " + events.get(i).endTime, events.get(i).name});
+//                    }
+//                }
+//            }
+//        }
+        ArrayList<Event> arrTemp = new ArrayList<>();
 
-        public void actionPerformed(ActionEvent e) {
-            if (monthToday == 0) {
-                monthToday = 11;
-                yearToday -= 1;
-            } else {
-                monthToday -= 1;
+        for (int i = 0; i < events.size(); i++) {
+            if (Integer.parseInt(YearInputLabel.getText().split(": ")[1]) == events.get(i).year && controller.MonthToInt(MonthInputLabel.getText().split(": ")[1]) == events.get(i).month && Integer.parseInt(DayInputLabel.getText().split(": ")[1]) == events.get(i).day) {
+                arrTemp.add(events.get(i));
             }
-            refreshCalendar(monthToday, yearToday);
         }
-    }
 
-    class btnNext_Action implements ActionListener {
-
-        public void actionPerformed(ActionEvent e) {
-            if (monthToday == 11) {
-                monthToday = 0;
-                yearToday += 1;
-            } else {
-                monthToday += 1;
+        if (!arrTemp.isEmpty()) {
+            Event eTemp;
+            for (int i = 1; i < arrTemp.size(); i++) {
+                for (int j = i; j > 0; j--) {
+                    if (timeToInt(arrTemp.get(j).startTime) < timeToInt(arrTemp.get(j - 1).startTime)) {
+                        eTemp = arrTemp.get(j);
+                        arrTemp.set(j, arrTemp.get(j - 1));
+                        arrTemp.set(j - 1, eTemp);
+                    }
+                }
             }
-            refreshCalendar(monthToday, yearToday);
         }
-    }
 
-    class cmbYear_Action implements ActionListener {
+        for (int i = 0; i < arrTemp.size(); i++) {
+            if (Integer.parseInt(YearInputLabel.getText().split(": ")[1]) == arrTemp.get(i).year && controller.MonthToInt(MonthInputLabel.getText().split(": ")[1]) == arrTemp.get(i).month && Integer.parseInt(DayInputLabel.getText().split(": ")[1]) == arrTemp.get(i).day) {
+                if (arrTemp.get(i).color.equalsIgnoreCase("green")) {
+                        agendaModel.addRow(new Object[]{arrTemp.get(i).startTime, arrTemp.get(i).name});
+                    } else {
+                        agendaModel.addRow(new Object[]{arrTemp.get(i).startTime + " - " + arrTemp.get(i).endTime, arrTemp.get(i).name});
+                    }
+                }
+            }
+        }
 
-        public void actionPerformed(ActionEvent e) {
-            if (cmbYear.getSelectedItem() != null) {
-                String b = cmbYear.getSelectedItem().toString();
-                yearToday = Integer.parseInt(b);
+        class btnPrev_Action implements ActionListener {
+
+            public void actionPerformed(ActionEvent e) {
+                if (monthToday == 0) {
+                    monthToday = 11;
+                    yearToday -= 1;
+                } else {
+                    monthToday -= 1;
+                }
                 refreshCalendar(monthToday, yearToday);
             }
         }
-    }
 
-    class btnAddEvent_Action implements ActionListener {
+        class btnNext_Action implements ActionListener {
 
-        @Override
-        public void actionPerformed(ActionEvent e) {
+            public void actionPerformed(ActionEvent e) {
+                if (monthToday == 11) {
+                    monthToday = 0;
+                    yearToday += 1;
+                } else {
+                    monthToday += 1;
+                }
+                refreshCalendar(monthToday, yearToday);
+            }
+        }
 
-            String strStart = startTime.getSelectedItem().toString();
-            String strEnd = endTime.getSelectedItem().toString();
+        class cmbYear_Action implements ActionListener {
 
-            int iStart = timeToInt(strStart);
-            int iEnd = timeToInt(strEnd);
+            public void actionPerformed(ActionEvent e) {
+                if (cmbYear.getSelectedItem() != null) {
+                    String b = cmbYear.getSelectedItem().toString();
+                    yearToday = Integer.parseInt(b);
+                    refreshCalendar(monthToday, yearToday);
+                }
+            }
+        }
 
-            if (YearInputLabel.getText() != null && MonthInputLabel.getText() != null && DayInputLabel.getText() != null && iStart <= iEnd && conflicts(strStart, strEnd)) { //you have to add months to this because it checks all events not just events of the specific day
-                System.out.println("in");
-                int col = calendarTable.getSelectedColumn();
-                int row = calendarTable.getSelectedRow();
+        class btnAddEvent_Action implements ActionListener {
 
-                modelCalendarTable.setValueAt(modelCalendarTable.getValueAt(row, col) + "\u25EF ", row, col);
+            @Override
+            public void actionPerformed(ActionEvent e) {
 
-                int month; //added until
+                String strStart = startTime.getSelectedItem().toString();
+                String strEnd = endTime.getSelectedItem().toString();
 
-                String[] MonthParts = MonthInputLabel.getText().split(" ");
+                int iStart = timeToInt(strStart);
+                int iEnd = timeToInt(strEnd);
 
-                month = controller.MonthToInt(MonthParts[1]);
+                if (YearInputLabel.getText() != null && MonthInputLabel.getText() != null && DayInputLabel.getText() != null && iStart <= iEnd && conflicts(strStart, strEnd)) { //you have to add months to this because it checks all events not just events of the specific day
+                    System.out.println("in");
+                    int col = calendarTable.getSelectedColumn();
+                    int row = calendarTable.getSelectedRow();
 
-                String[] parts = DayInputLabel.getText().split(" ");
-                String[] parts2 = YearInputLabel.getText().split(" ");
+                    modelCalendarTable.setValueAt(modelCalendarTable.getValueAt(row, col) + "\u25EF ", row, col);
 
-                String date = month + "/" + parts[1] + "/" + parts2[1];
+                    int month; //added until
 
-                System.out.println(parts[1]);
-                System.out.println(parts2[1]);
-                System.out.println(month);
+                    String[] MonthParts = MonthInputLabel.getText().split(" ");
 
-                //what i'm planning to do is for the to-do tasks, we make a function that passes the start time, and that function "adds" 30 mins
+                    month = controller.MonthToInt(MonthParts[1]);
+
+                    String[] parts = DayInputLabel.getText().split(" ");
+                    String[] parts2 = YearInputLabel.getText().split(" ");
+
+                    String date = month + "/" + parts[1] + "/" + parts2[1];
+
+                    System.out.println(parts[1]);
+                    System.out.println(parts2[1]);
+                    System.out.println(month);
+
+                    //what i'm planning to do is for the to-do tasks, we make a function that passes the start time, and that function "adds" 30 mins
+                    if (isTask.isSelected()) {
+                        events.add(new Event(date, eventBox.getText(), "Green", startTime.getSelectedItem().toString(), startTime.getSelectedItem().toString())); //start time and end time for tasks are the same, we can change it if we need it to be + 30 minutes but i think it should be fine
+                        for (int i = 0; i < events.size(); i++) {
+                            if (events.get(i).name.equals(eventBox.getText())) {
+                                agendaModel.addRow(new Object[]{events.get(i).startTime, events.get(i).name});
+                            }
+                        }
+                    } else {
+                        events.add(new Event(date, eventBox.getText(), "Blue", startTime.getSelectedItem().toString(), endTime.getSelectedItem().toString()));
+                        for (int i = 0; i < events.size(); i++) {
+                            if (events.get(i).name.equals(eventBox.getText())) {
+                                agendaModel.addRow(new Object[]{events.get(i).startTime, events.get(i).name});
+                            }
+                        }
+                    }
+
+                    controller.writeData(events, false);
+
+                    dayTable.setValueAt(eventBox.getText(), controller.TimeToRowNumber(startTime.getSelectedItem().toString()), 1);
+                    eventBox.setText("");
+
+                }
+            }
+        }
+
+        class btnDeleteEvent_Action implements ActionListener {
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                System.out.println("clicked delete");
+                int col = dayTable.getSelectedColumn();
+                int row = dayTable.getSelectedRow();
+                String name = dayTable.getValueAt(dayTable.getSelectedRow(), dayTable.getSelectedColumn()).toString();
+                System.out.println(dayTable.getValueAt(dayTable.getSelectedRow(), dayTable.getSelectedColumn()));
+
+                for (int i = 0; i < events.size(); i++) {
+                    if (events.get(i).name.equals(name)) {
+                        agendaModel.removeRow(i);
+                    }
+                }
+
+                controller.deleteData(events, name);
+                dayTable.setValueAt("", row, col);
+
+            }
+
+        }
+
+        class btnDoneAgenda_Action implements ActionListener {
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                int col = agendaTable.getSelectedColumn();
+                int row = agendaTable.getSelectedRow();
+                String name = agendaTable.getValueAt(row, col).toString();
+
+                for (int i = 0; i < events.size(); i++) {
+
+                    if (events.get(i).name.equals(name) && events.get(i).color.equalsIgnoreCase("green")) {
+                        controller.deleteData(events, name);
+                        agendaTable.setValueAt(name + " (DONE)", row, col);
+                    } else {
+                        System.out.println("Does not work for events");
+                    }
+                }
+            }
+
+        }
+
+        class isDay_Action implements ActionListener {
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                dayTab.setVisible(true);
+                agendaTab.setVisible(false);
+                addTab.setVisible(false);
+                isAgenda.setSelected(false);
+            }
+
+        }
+
+        class isAgenda_Action implements ActionListener {
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                dayTab.setVisible(false);
+                agendaTab.setVisible(true);
+                addTab.setVisible(false);
+                isDay.setSelected(false);
+            }
+
+        }
+
+        class isTask_Action implements ActionListener {
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
                 if (isTask.isSelected()) {
-                    events.add(new Event(date, eventBox.getText(), "Green", startTime.getSelectedItem().toString(), startTime.getSelectedItem().toString())); //start time and end time for tasks are the same, we can change it if we need it to be + 30 minutes but i think it should be fine
-                    for (int i = 0; i < events.size(); i++) {
-                        if (events.get(i).name.equals(eventBox.getText())) {
-                            agendaModel.addRow(new Object[]{events.get(i).startTime, events.get(i).name});
-                        }
-                    }
+                    endTime.setEnabled(false);
                 } else {
-                    events.add(new Event(date, eventBox.getText(), "Blue", startTime.getSelectedItem().toString(), endTime.getSelectedItem().toString()));
-                    for (int i = 0; i < events.size(); i++) {
-                        if (events.get(i).name.equals(eventBox.getText())) {
-                            agendaModel.addRow(new Object[]{events.get(i).startTime, events.get(i).name});
-                        }
-                    }
-                }
-
-                controller.writeData(events, false);
-
-                dayTable.setValueAt(eventBox.getText(), controller.TimeToRowNumber(startTime.getSelectedItem().toString()), 1);
-                eventBox.setText("");
-
-            }
-        }
-    }
-
-    class btnDeleteEvent_Action implements ActionListener {
-
-        @Override
-        public void actionPerformed(ActionEvent e) {
-            System.out.println("clicked delete");
-            int col = dayTable.getSelectedColumn();
-            int row = dayTable.getSelectedRow();
-            String name = dayTable.getValueAt(dayTable.getSelectedRow(), dayTable.getSelectedColumn()).toString();
-            System.out.println(dayTable.getValueAt(dayTable.getSelectedRow(), dayTable.getSelectedColumn()));
-
-            for (int i = 0; i < events.size(); i++) {
-                if (events.get(i).name.equals(name)) {
-                    agendaModel.removeRow(i);
+                    endTime.setEnabled(true);
                 }
             }
 
-            controller.deleteData(events, name);
-            dayTable.setValueAt("", row, col);
-
         }
 
-    }
-
-    class btnDoneAgenda_Action implements ActionListener {
-
-        @Override
-        public void actionPerformed(ActionEvent e) {
-            int col = agendaTable.getSelectedColumn();
-            int row = agendaTable.getSelectedRow();
-            String name = agendaTable.getValueAt(row, col).toString();
-
-            for (int i = 0; i < events.size(); i++) {
-
-                if (events.get(i).name.equals(name) && events.get(i).color.equalsIgnoreCase("green")) {
-                    controller.deleteData(events, name);
-                    agendaTable.setValueAt(name + " (DONE)", row, col);
-                } else {
-                    System.out.println("Does not work for events");
-                }
-            }
-        }
-
-    }
-
-    class isDay_Action implements ActionListener {
-
-        @Override
-        public void actionPerformed(ActionEvent e) {
-            dayTab.setVisible(true);
-            agendaTab.setVisible(false);
-            addTab.setVisible(false);
-            isAgenda.setSelected(false);
-        }
-
-    }
-
-    class isAgenda_Action implements ActionListener {
-
-        @Override
-        public void actionPerformed(ActionEvent e) {
-            dayTab.setVisible(false);
-            agendaTab.setVisible(true);
-            addTab.setVisible(false);
-            isDay.setSelected(false);
-        }
-
-    }
     
-    class isTask_Action implements ActionListener {
-
-        @Override
-        public void actionPerformed(ActionEvent e) {
-            if(isTask.isSelected()){
-                endTime.setEnabled(false);
-            }else{
-                endTime.setEnabled(true);
-            }
-        }
-        
-    }
 
     public void setEvents(ArrayList<Event> events) {
         this.events = events;
