@@ -157,6 +157,8 @@ public class theView {
         }
 
         calendarTable.setDefaultRenderer(calendarTable.getColumnClass(0), new TableRenderer(events));
+	agendaTable.setDefaultRenderer(dayTable.getColumnClass(0), new AgendaDayRenderer(events, self));
+        dayTable.setDefaultRenderer(dayTable.getColumnClass(0), new DayAgendaRenderer(events, self));		
     }
 
     public theView() {
@@ -391,7 +393,6 @@ public class theView {
 
         agendaTable.setRowHeight(41);
         agendaModel.setColumnCount(2);
-        //agendaModel.setRowCount(48);
         agendaTable.setShowGrid(true);
 
         for (int i = yearBound - 100; i <= yearBound + 100; i++) {
@@ -466,39 +467,7 @@ public class theView {
         }
     }
 
-    public void arrangeAgenda() { //testing phase still remove once good
-//        int low = Integer.MAX_VALUE; //gets highest possible integer
-//        int temp = 0;
-//        int count = 0;
-//
-//        ArrayList<Integer> aList = new ArrayList<>();
-//
-//        int rowCount = agendaModel.getRowCount();
-//        for (int i = rowCount - 1; i >= 0; i--) {
-//            agendaModel.removeRow(i);
-//        }
-//
-//        for (int i = 0; i < events.size(); i++) {
-//            if (Integer.parseInt(YearInputLabel.getText().split(": ")[1]) == events.get(i).year && controller.MonthToInt(MonthInputLabel.getText().split(": ")[1]) == events.get(i).month && Integer.parseInt(DayInputLabel.getText().split(": ")[1]) == events.get(i).day) {
-//                aList.add(timeToInt(startTime.toString()));
-//            }
-//        }
-//
-//        Collections.sort(aList);
-//
-//        for (int i = 0; i < events.size(); i++) {
-//            if (Integer.parseInt(YearInputLabel.getText().split(": ")[1]) == events.get(i).year && controller.MonthToInt(MonthInputLabel.getText().split(": ")[1]) == events.get(i).month && Integer.parseInt(DayInputLabel.getText().split(": ")[1]) == events.get(i).day) {
-//                low = aList.get(0);
-//                aList.remove(0);
-//                if (timeToInt(events.get(i).startTime) == low) {
-//                    if (events.get(i).color.equalsIgnoreCase("green")) {
-//                        agendaModel.addRow(new Object[]{events.get(i).startTime, events.get(i).name});
-//                    } else {
-//                        agendaModel.addRow(new Object[]{events.get(i).startTime + " - " + events.get(i).endTime, events.get(i).name});
-//                    }
-//                }
-//            }
-//        }
+    public void arrangeAgenda() { 
         ArrayList<Event> arrTemp = new ArrayList<>();
 
         for (int i = 0; i < events.size(); i++) {

@@ -21,7 +21,7 @@ import designchallengemvc.Event;
  *
  * @author gabri
  */
-public class DayAgendaRenderer extends JTextPane implements TableCellRenderer {
+public class AgendaDayRenderer extends JTextPane implements TableCellRenderer {
 
     private int TimeToRowNumber(String eTime) {
 
@@ -177,7 +177,7 @@ public class DayAgendaRenderer extends JTextPane implements TableCellRenderer {
     private ArrayList<Event> events;
     private theView self;
 
-    public DayAgendaRenderer(ArrayList<Event> e, theView view) {
+    public AgendaDayRenderer(ArrayList<Event> e, theView view) {
         events = e;
         self = view;
     }
@@ -205,6 +205,7 @@ public class DayAgendaRenderer extends JTextPane implements TableCellRenderer {
         if (value != null) {
 
             String sval = String.valueOf(value);
+            String subs = sval.substring(sval.indexOf(" ") + 1, sval.length());
 
             try {
 
@@ -216,23 +217,7 @@ public class DayAgendaRenderer extends JTextPane implements TableCellRenderer {
 
                 for (int i = 0; i < events.size(); i++) {
                     if ("Blue".equals(events.get(i).color)) {
-                        int j = TimeToRowNumber(events.get(i).startTime);
                         
-                        while (j < TimeToRowNumber(events.get(i).endTime)) {
-                            if (row == j && column == 1 && Integer.parseInt(self.DayInputLabel.getText().split(": ")[1]) == events.get(i).day) {
-                                setBackground(Color.BLUE);
-                            }
-                            j++;
-                        }
-                    } else if("Green".equals(events.get(i).color)){
-                        int k = TimeToRowNumber(events.get(i).startTime);
-                        
-                        while(k < TimeToRowNumber(events.get(i).endTime)){
-                            if(row == k && column == 1 && Integer.parseInt(self.DayInputLabel.getText().split(": ")[1]) == events.get(i).day){
-                                setBackground(Color.GREEN);
-                            }
-                            k++;
-                        }
                     }
                 }
 
@@ -245,9 +230,9 @@ public class DayAgendaRenderer extends JTextPane implements TableCellRenderer {
         }
 
         //if user clicks on a panel
-//        if (selected) {
-//            setBackground(Color.LIGHT_GRAY);
-//        }
+        if (selected) {
+            setBackground(Color.LIGHT_GRAY);
+        }
         return this;
     }
 }
