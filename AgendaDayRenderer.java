@@ -232,9 +232,9 @@ public class AgendaDayRenderer extends JTextPane implements TableCellRenderer {
         }
 
         //if user clicks on a panel
-        if (selected) {
-            setBackground(Color.LIGHT_GRAY);
-        }
+//        if (selected) {
+//            setBackground(Color.LIGHT_GRAY);
+//        }
         return this;
     }
 }
